@@ -1,0 +1,8 @@
+{% extends 'base/layout.html' %}
+{% load crispy_forms_tags %}
+
+{% block content %}
+    <h1 class="my-4">Удаление пользователя</h1>
+    <p>Вы уверены, что хотите удалить {{ user.name }}</p>
+    {% crispy form %}
+{% endblock %}

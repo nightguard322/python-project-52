@@ -29,6 +29,33 @@ class CustomUserCreationForm(UserCreationForm):
         }
 
 class UserUpdateForm(forms.ModelForm):
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.helper = FormHelper()
+        self.helper.form_method = 'post'
+        self.helper.add_input(Submit('submit', 'Изменить', css_class='btn btn-primary'))
+
+    password1 = forms.CharField(label='Пароль', widget=forms.PasswordInput)
+    password2 = forms.CharField(label='Подтверждение пароля', widget=forms.PasswordInput)
+
     class Meta:
         model = get_user_model()
-        fields = ('first_name', 'last_name', 'username', 'password1', 'password2')
+        fields = ('first_name', 'last_name', 'username')
+
+    def clean_password2(self):
+        password1 = self.cleaned_data.get('password1')
+        password2 = self.cleaned_data.get('password2')
+        if password1 and password2 and password1 != password2:
+            raise forms.ValdatorError('Пароли не совпадают')
+        return password2
+
+class UserDeleteForm(forms.ModelForm):
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.helper = FormHelper()
+        self.helper.form_method = 'post'
+        self.helper.add_input(Submit('submit', 'Да, удалить', css_class='btn btn-danger'))
+        
+    class Meta:
+        model = get_user_model()
+        fields = ()
