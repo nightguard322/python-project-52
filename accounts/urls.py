@@ -6,6 +6,6 @@ app_name = 'accounts'
 urlpatterns = [
     path('', acc_views.UserListView.as_view(), name='index'),
     path('create/', acc_views.UserCreateView.as_view(), name='signup'),
-    path('update/<int:id>', acc_views.UserUpdateView.as_view(), name='update'),
-    path('delete/<int:id>', acc_views.UserDeleteView.as_view(), name='delete'),
+    path('<int:pk>/update/', acc_views.UserUpdateView.as_view(), name='update'),
+    path('<int:pk>/delete/', acc_views.UserDeleteView.as_view(), name='delete'),
 ]

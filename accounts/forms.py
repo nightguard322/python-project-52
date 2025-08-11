@@ -1,4 +1,4 @@
-from django.contrib.auth.forms import UserCreationForm, UserChangeForm
+from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth import get_user_model
 from django.utils.translation import gettext_lazy as _
 from django import forms
@@ -55,7 +55,10 @@ class UserDeleteForm(forms.ModelForm):
         self.helper = FormHelper()
         self.helper.form_method = 'post'
         self.helper.add_input(Submit('submit', 'Да, удалить', css_class='btn btn-danger'))
-        
+    
+    confirm = forms.BooleanField(
+        required=True
+    )
     class Meta:
         model = get_user_model()
-        fields = ()
+        fields = ('confirm',)
