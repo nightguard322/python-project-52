@@ -9,11 +9,20 @@
         <li class="nav-item">
           <a class="nav-link active" aria-current="page" href="{% url 'accounts:index' %}">Пользователи</a>
         </li>
-        <li class="nav-item">
-          <a class="nav-link" href="{% url 'login' %}">Вход</a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link" href="{% url 'accounts:signup' %}">Регистрация</a>
+        {% if user.is_authenticated %}
+          <li class="nav-item">
+            <form action="{% url 'logout' %}" method="post">
+              {% csrf_token %}
+              <button class="nav-link" type="submit">Выход</button>
+            </form>
+          </li>
+        {% else %}
+          <li class="nav-item">
+            <a class="nav-link" href="{% url 'login' %}">Вход</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="{% url 'accounts:signup' %}">Регистрация</a>
+        {% endif %}
         </li>
       </ul>
     </div>

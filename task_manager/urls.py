@@ -15,15 +15,15 @@ Including another URLconf
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
 from django.contrib import admin
-from django.urls import path, include
+from django.urls import path, include, reverse_lazy
 from task_manager.tasks import views as task_views
-from .views import CrispyLoginView
+from .views import CrispyLoginView, UserLogoutView
 from django.contrib.auth.views import LogoutView
 
 urlpatterns = [
     path('', task_views.index, name='users'),
     path('accounts/', include('accounts.urls')),
     path('login/', CrispyLoginView.as_view(), name='login'),
-    path('logout/', LogoutView.as_view(), name='logout'),
+    path('logout/', UserLogoutView.as_view(), name='logout'),
     path('admin/', admin.site.urls),
 ]
