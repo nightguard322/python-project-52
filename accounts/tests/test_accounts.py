@@ -107,3 +107,42 @@ def test_register_user(client, user):
     assert response.url == reverse('login')
     accounts_list = client.get(reverse('accounts:index'))
     assert 'test' in accounts_list.content.decode()
+
+
+@pytest.mark.django_db
+def test_update_user(client, user):
+    client.force_login(user)
+    response = client.post(
+        reverse('accounts:update', kwargs={'pk': user.id}), {
+            'username': 'test',
+            'first_name': 'new test name',
+            'last_name': 'test',
+            'password1': 'Tyu1254Q',
+            'password2': 'Tyu1254Q'
+        },
+        follow=True
+    )
+    if not response.redirect_chain:
+        form = response.context['form']
+        print(form.errors)
+        assert False, 'Ожидался редирект, но тест провалился, видимо ошибка валидации'
+    else:
+        redirect_url, status_code = response.redirect_chain[0]
+        assert status_code == 302
+        assert redirect_url== reverse('accounts:index')
+        assert 'new test name' in response.content.decode()
+
+
+@pytest.mark.django_db
+def test_delete_user(client, user):
+    client.force_login(user)
+    response = client.get(reverse('accounts:index'))
+    assert 'Vasya Pupkin' in response.content.decode()
+    response = client.post(
+        reverse('accounts:delete', kwargs={'pk': user.id}),
+        follow=True
+    )
+    redirect_url, status_code = response.redirect_chain[0]
+    assert status_code == 302
+    assert redirect_url== reverse('accounts:index')
+    assert not 'Vasya Pupkin' in response.content.decode()
