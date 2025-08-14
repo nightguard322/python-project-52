@@ -11,5 +11,11 @@ dependencies = [
     "django-bootstrap5>=25.2",
     "django-crispy-forms>=2.4",
     "gunicorn>=23.0.0",
+    "pytest-django>=4.11.1",
     "python-dotenv>=1.1.1",
 ]
+[tool.pytest.ini_options]
+DJANGO_SETTINGS_MODULE = "task_manager.settings"
+python_files = ["tests.py", "test_*.py", "*_tests.py"]
+addopts = ["--tb=short", "--strict-markers"]
+testpaths = ["accounts"]

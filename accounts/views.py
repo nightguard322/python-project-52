@@ -58,5 +58,8 @@ class UserDeleteView(LoginRequiredMixin, UserPassesTestMixin, DeleteView):
         return self.request.user == self.get_object()
 
     def handle_no_permission(self):
-        messages.error(self.request, 'У вас нет прав для изменения другого пользователя.')
-        return redirect(reverse('accounts:index'))
+        if self.request.user.is_authenticated:
+            messages.error(self.request, 'У вас нет прав для изменения другого пользователя.')
+            return redirect(reverse('accounts:index'))
+        messages.error(self.request, 'Вы не авторизованы! Пожалуйста, выполните вход.')
+        return redirect(reverse('login'))

@@ -21,7 +21,7 @@ from .views import CrispyLoginView, UserLogoutView
 from django.contrib.auth.views import LogoutView
 
 urlpatterns = [
-    path('', task_views.index, name='users'),
+    path('', task_views.index, name='index'),
     path('accounts/', include('accounts.urls')),
     path('login/', CrispyLoginView.as_view(), name='login'),
     path('logout/', UserLogoutView.as_view(), name='logout'),
