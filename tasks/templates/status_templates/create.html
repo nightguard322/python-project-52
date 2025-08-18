@@ -1,0 +1,10 @@
+{% extends 'base/layout.html' %}
+
+<h1 class="my-4">{% if status.pk %} Создать {% else %} Изменить {% endif %} статус</h1>
+<form action="{% url 'tasks:status_create' tasks.pk%}" method="post">
+    {% csrf_token %}
+    <table border="1">
+       {{ form }}
+    </table>
+    <input type="submit" value="{% if status.pk %} Создать {% else %} Изменить {% endif %}">
+</form>

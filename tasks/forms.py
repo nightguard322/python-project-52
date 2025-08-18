@@ -7,7 +7,7 @@ class StatusModelForm(ModelForm):
         model = Status
         fields = ['name']
 
-class TaskCreationForm(ModelForm):
+class TaskModelForm(ModelForm):
     class Meta:
         model = Status
-        fields = [__all__]
+        fields = ['name']

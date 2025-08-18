@@ -4,7 +4,6 @@ from django.urls import reverse
 from django.contrib.auth import get_user_model
 
 
-
 @pytest.fixture
 def user():
     User = get_user_model()
@@ -63,6 +62,7 @@ def test_delete_permissions(client, user, user_type, redirect_page, message):
     _check_permissions_helper(client, 'accounts:delete', user, user_type, redirect_page, message)
 
 
+@pytest.mark.django_db
 def test_not_logged_in_see_users(client, user):
     response = client.get(reverse('accounts:index'))
     assert response.status_code == 200
@@ -71,7 +71,7 @@ def test_not_logged_in_see_users(client, user):
 
 @pytest.mark.django_db
 def test_not_logged_in_see_buttons(client, user):
-    response = client.get(reverse('index'))
+    response = client.get(reverse('accounts:index'))
     assert response.status_code == 200
     assert 'Вход' in response.content.decode()
     assert 'Регистрация' in response.content.decode()
@@ -80,7 +80,7 @@ def test_not_logged_in_see_buttons(client, user):
 @pytest.mark.django_db
 def test_logged_in_see_exit(client, user):
     client.force_login(user)
-    response = client.get(reverse('index'))
+    response = client.get(reverse('accounts:index'))
     assert response.status_code == 200
     assert 'Выход' in response.content.decode()
 
