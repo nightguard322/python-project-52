@@ -1,8 +1,10 @@
 {% extends 'base/layout.html' %}
 
+{% block content %}
 <h1 class="my-4">Удаление статуса</h1>
-<form action="{% url 'tasks:status_delete' tasks.pk%}" method="post">
+<form action="{% url 'tasks:status_delete' object.pk %}" method="post">
     {% csrf_token %}
-    <p>Вы уверены, что хотите удалить {% status.name %} ?</p>
+    <p>Вы уверены, что хотите удалить {{ status.name }} ?</p>
     <input type="submit" value="Да, удалить">
 </form>
+{% endblock %}

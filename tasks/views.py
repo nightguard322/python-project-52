@@ -25,7 +25,8 @@ class TaskListView(ListView):
 
 
 class StatusCreateView(CreateView):
-    form = StatusModelForm
+    model = Status
+    form_class = StatusModelForm
     template_name = 'status_templates/status_form.html'
     success_url = reverse_lazy('statuses:index')
 
@@ -36,7 +37,8 @@ class StatusCreateView(CreateView):
 
 
 class StatusUpdateView(LoginRequiredMixin, UpdateView):
-    form = StatusModelForm
+    model = Status
+    form_class = StatusModelForm
     template_name = 'status_templates/status_form.html'
     success_url = reverse_lazy('statuses:index')
 
@@ -47,9 +49,9 @@ class StatusUpdateView(LoginRequiredMixin, UpdateView):
     
 
 class StatusDeleteView(LoginRequiredMixin, DeleteView):
-    form = StatusModelForm
-    template_name = 'status_templates/status_delete.html'
-    success_url = reverse_lazy('statuses:index')
+    model = Status
+    template_name = 'status_templates/delete.html'
+    success_url = reverse_lazy('tasks:status_index')
 
     def delete(self, request, *args, **kwargs):
         try:
@@ -60,7 +62,7 @@ class StatusDeleteView(LoginRequiredMixin, DeleteView):
             return redirect(self.success_url)
 
 class TaskCreateView(CreateView):
-    form = TaskModelForm
+    form_class = TaskModelForm
     template_name = 'status_templates/status_form.html'
     success_url = reverse_lazy('statuses:index')
 
@@ -71,7 +73,7 @@ class TaskCreateView(CreateView):
 
 
 class TaskUpdateView(LoginRequiredMixin, UpdateView):
-    form = TaskModelForm
+    form_class = TaskModelForm
     template_name = 'status_templates/status_form.html'
     success_url = reverse_lazy('statuses:index')
 
@@ -82,7 +84,7 @@ class TaskUpdateView(LoginRequiredMixin, UpdateView):
     
 
 class TaskDeleteView(LoginRequiredMixin, DeleteView):
-    template_name = 'status_templates/status_delete.html'
+    template_name = 'status_templates/delete.html'
     success_url = reverse_lazy('statuses:index')
 
     def delete(self, request, *args, **kwargs):

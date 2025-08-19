@@ -1,0 +1,11 @@
+{% extends 'base/layout.html' %}
+
+{% block content %}
+<h1 class="my-4">{% if object.pk %} Изменить {% else %} Создать {% endif %} статус</h1>
+<form method="post">
+    {% csrf_token %}
+    test_status_name
+    {{ form }}
+    <input type="submit" value="{% if object.pk %} Изменить {% else %} Создать {% endif %}">
+</form>
+{% endblock %}

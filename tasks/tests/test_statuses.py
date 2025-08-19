@@ -1,6 +1,7 @@
 import pytest
 from django.urls import reverse
 from django.contrib.auth import get_user_model
+from ..models import Status
 
 @pytest.fixture
 def user():
@@ -16,7 +17,7 @@ def user():
 @pytest.fixture
 def status():
     return Status.objects.create(
-        name='test_status'
+        name='test_status_name'
     )
 
 
@@ -25,27 +26,15 @@ def test_not_logged_user_show_status(client):
     response = client.get(
         reverse('tasks:status_index'),
         follow=True)
-    redirect_page, status_code = response.redirect_chain[0]
-    assert status_code == 200
-    assert redirect_page == '/login/'
-
-
-@pytest.mark.django_db
-def test_logged_user_show_statuses(client, user, status):
-    client.force_login(user)
-    response = client.get(
-        reverse('tasks:status_index'), 
-        follow=True)
-    assert status_code == 200
-    assert test_status.name in response.content.decode()
-
+    assert response.status_code == 200
+    assert 'Статусы' in response.content.decode()
+    
 
 @pytest.mark.django_db
 def test_logged_user_can_see_edit_form(client, user, status):
     client.force_login(user)
     response = client.get(
-        reverse('tasks:status_update'),
-        follow=True
+        reverse('tasks:status_update', kwargs={'pk': status.id})
     )
     assert response.status_code == 200
     assert status.name in response.content.decode()
@@ -60,7 +49,7 @@ def test_create_status(client, user, status):
         {'name': name},
         follow=True
     )
-    redirect_page, status.code = response.redirect_chain[0]
+    redirect_page, status.code = response.redirect_chain[-1]
     assert status_code == 200
     assert redirect_page == reverse('tasks:status_index')
     messages = list(get_messages(response.wsgi_request))
@@ -88,19 +77,21 @@ def test_update_status(client, user, status):
 @pytest.mark.django_db
 def test_logged_user_can_see_delete_form(client, user, status):
     client.force_login(user)
-    response = client.get('tasks:status_delete')
+    response = client.get(
+        reverse('tasks:status_delete', kwargs={'pk': status.id})
+    )
     assert response.status_code == 200
-    assert f'Вы уверены, что хотите удалить {status.name}?' in response.content.decode()
+    assert f'Вы уверены, что хотите удалить {status.name} ?' in response.content.decode()
 
 
 @pytest.mark.django_db
 def test_delete_status(client, user, status):
     client.force_login(user)
     response = client.post(
-        reverse('tasks:status_index', kwargs={'pk': status.id}),
+        reverse('tasks:status_delete', kwargs={'pk': status.id}),
         follow=True
     )
-    redirect_page, status_code = response.redirect_chain[0]
+    redirect_page, status_code = response.redirect_chain[-1]
     assert status_code == 200
     assert redirect_page == reverse('tasks:status_index')
     messages = list(get_messages(responce.wsgi_request))

@@ -9,5 +9,5 @@ class StatusModelForm(ModelForm):
 
 class TaskModelForm(ModelForm):
     class Meta:
-        model = Status
+        model = Task
         fields = ['name']
