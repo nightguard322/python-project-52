@@ -23,7 +23,7 @@
             </form>
           </li>
           <li class="nav-item">
-            <form action="{% url 'tasks:status_index' %}" method="post">
+            <form action="{% url 'tasks:task_index' %}" method="post">
               {% csrf_token %}
               <button class="nav-link" type="submit">Задачи</button>
             </form>

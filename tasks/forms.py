@@ -16,4 +16,8 @@ class StatusModelForm(forms.ModelForm):
 class TaskModelForm(forms.ModelForm):
     class Meta:
         model = Task
-        fields = ['name']
+        fields = [
+            'name',
+            'description',
+            'status',
+            'assignee']

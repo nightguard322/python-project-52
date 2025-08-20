@@ -19,13 +19,6 @@ class StatusListView(ListView):
     template_name = 'status_templates/index.html'
     context_object_name = 'statuses'
 
-
-class TaskListView(ListView):
-    model = Task
-    template_name = 'task_templates/index.html'
-    context_object_name = 'tasks'
-
-
 class StatusBaseView():
     model = Status
     form_class = StatusModelForm
@@ -61,14 +54,19 @@ class StatusDeleteView(LoginRequiredMixin, DeleteView):
             messages.error(self.request, 'Невозможно удалить статус, потому что он используется')
             return self.success_url
 
+class TaskListView(ListView):
+    model = Task
+    template_name = 'task_templates/index.html'
+    context_object_name = 'tasks'
 
 class TaskBaseView():
+    model = Task
     form_class = TaskModelForm
-    template_name = 'task_templates/status_form.html'
+    template_name = 'task_templates/task_form.html'
     success_url = reverse_lazy('tasks:task_index')
     success_message = None
 
-class TaskCreateView(LoginRequiredMixin, TaskBaseView, UpdateView):
+class TaskCreateView(LoginRequiredMixin, TaskBaseView, CreateView):
     success_message = 'Задача успешно создана'
 
 class TaskUpdateView(LoginRequiredMixin, TaskBaseView, UpdateView):
@@ -76,8 +74,9 @@ class TaskUpdateView(LoginRequiredMixin, TaskBaseView, UpdateView):
     
 
 class TaskDeleteView(UserPassesTestMixin, DeleteView):
-    template_name = 'status_templates/delete.html'
-    success_url = reverse_lazy('statuses:index')
+    model = Task
+    template_name = 'task_templates/delete.html'
+    success_url = reverse_lazy('tasks:task_index')
 
     def get_success_url(self):
         messages.success(self.request, 'Статус успешно удален')

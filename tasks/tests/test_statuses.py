@@ -14,6 +14,15 @@ def user():
         password='Qq12345'
     )
 
+@pytest.fixture
+def assignee():
+    User = get_user_model()
+    return User.objects.create_user(
+        username='Bob',
+        first_name='Bob',
+        last_name = 'Marley',
+        password='Qy123456'
+    )
 
 @pytest.fixture
 def status():
@@ -22,12 +31,28 @@ def status():
     )
 
 @pytest.fixture
-def task(user):
+def status_data():
+    return {'name':'test_status_name'}
+
+@pytest.fixture
+def task(user, assignee, status):
     return Task.objects.create(
-        'name': 'Test task',
-        'description': 'Test description',
-        'author': user
+        name='Test task',
+        description='Test description',
+        author=user,
+        assignee=assignee,
+        status=status
     )
+
+@pytest.fixture
+def task_data(user, assignee, status):
+    return {
+            'name': 'Test task',
+            'description': 'Test description',
+            'author': user.id,
+            'assignee': assignee.id,
+            'status': status.id
+        }
 
 @pytest.mark.django_db  
 @pytest.mark.parametrize(
@@ -66,24 +91,25 @@ def test_logged_user_can_see_edit_form(client, user, request, route, fixture_nam
 @pytest.mark.parametrize(
     'data, post_route, success_route, message', [
         (
-            {'name': 'new'},
+            'status_data',
             'tasks:status_create',
             'tasks:status_index',
             'Статус успешно создан'
         ),
         (
-            {'name': 'new'},
+            'task_data',
             'tasks:task_create',
             'tasks:task_index',
             'Задача успешно создана'
         ),
     ]
 )
-def test_create_status(client, user, data, post_route, success_route, message):
+def test_create_status(client, user, request, data, post_route, success_route, message):
     client.force_login(user)
+    post_data = request.getfixturevalue(data)
     response = client.post(
         reverse(post_route),
-        data,
+        post_data,
         follow=True
     )
     assert len(response.redirect_chain) > 0, (
@@ -94,31 +120,32 @@ def test_create_status(client, user, data, post_route, success_route, message):
     assert redirect_page == reverse(success_route)
     messages = list(get_messages(response.wsgi_request))
     assert message in str(messages[0])
-    assert data['name'] in response.content.decode()
+    assert post_data['name'] in response.content.decode()
 
 
 @pytest.mark.django_db
 @pytest.mark.parametrize(
-    'model, data, post_route, success_route, message', [
-        ('status', {'name': 'at_work'}, 'tasks:status_update', 'tasks:status_index', 'Статус успешно изменен'),
-        ('task', {'name': 'Тестовая задача'}, 'tasks:task_update', 'tasks:task_index', 'задача успешно изменена'),
+    'model_name, data, post_route, success_route, message', [
+        ('status', 'status_data', 'tasks:status_update', 'tasks:status_index', 'Статус успешно изменен'),
+        ('task', 'task_data', 'tasks:task_update', 'tasks:task_index', 'задача успешно изменена'),
     ]
 )
 def test_update_status(
         client,
         user,
         request,
-        model,
+        model_name,
         data,
         post_route,
         success_route,
         message
     ):
     client.force_login(user)
-    entity = request.getfixturevalue(model)
+    entity = request.getfixturevalue(model_name)
+    post_data = request.getfixturevalue(data)
     response = client.post(
-        reverse(post_route, kwargs={'pk': entity.pk}),
-        data,
+        reverse(post_route, kwargs={'pk': entity.id}),
+        post_data,
         follow=True
     )
     assert len(response.redirect_chain) > 0, (
@@ -126,9 +153,10 @@ def test_update_status(
     )
     redirect_page, status_code = response.redirect_chain[0]
     assert status_code == 302
-    assert redirect_page == reverse()
-    assert data['name'] in response.content.decode()
+    assert redirect_page == reverse(success_route)
+    assert post_data['name'] in response.content.decode()
     messages = list(get_messages(response.wsgi_request))
+    assert len(messages) > 0, 'Сообщения не пришли'
     assert message in str(messages[0])
 
 
