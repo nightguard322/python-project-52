@@ -1,13 +1,19 @@
-from django.forms import ModelForm
+from django import forms
 from django.utils.translation import gettext_lazy as _
 from .models import Status, Task
 
-class StatusModelForm(ModelForm):
+class StatusModelForm(forms.ModelForm):
     class Meta:
         model = Status
         fields = ['name']
+        widgets = {
+            'name': forms.TextInput(attrs={
+                'class': 'form-control',
+                'placeholder': 'Имя'
+            })
+        }
 
-class TaskModelForm(ModelForm):
+class TaskModelForm(forms.ModelForm):
     class Meta:
         model = Task
         fields = ['name']

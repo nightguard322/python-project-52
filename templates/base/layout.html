@@ -1,3 +1,5 @@
+{% load message_tags %}
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -10,6 +12,13 @@
 <body>
     {% include 'includes/header.html' %}
     <main class="container wrapper flex-grow-1">
+        {% if messages %}
+            <div class="messages">
+                {% for message in messages %}
+                <p{% if message.tags %} class="alert {{ message|prepare }}"{% endif %}>{{ message }}</p>
+                {% endfor %}
+            </div>
+        {% endif %}
         {% block content %}{% endblock %}
     </main>
 </body>

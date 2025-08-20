@@ -3,18 +3,18 @@ from django.conf import settings
 
 # Create your models here.
 class Status(models.Model):
-    NEW = 'new'
-    AT_WORK = 'at_work'
-    TESTING = 'testing'
-    DONE = 'done'
+    # NEW = 'new'
+    # AT_WORK = 'at_work'
+    # TESTING = 'testing'
+    # DONE = 'done'
 
-    STATUSES = [
-        (NEW, 'новый'),
-        (AT_WORK, 'в работе'),
-        (TESTING, 'на тестировании'),
-        (DONE, 'завершен')
-    ]
-    name = models.CharField(verbose_name='Название', max_length=200, choices=STATUSES, default=NEW)
+    # STATUSES = [
+    #     (NEW, 'новый'),
+    #     (AT_WORK, 'в работе'),
+    #     (TESTING, 'на тестировании'),
+    #     (DONE, 'завершен')
+    # ]
+    name = models.CharField(verbose_name='Имя', max_length=200) #, choices=STATUSES, default=NEW)
     created_at = models.DateTimeField(verbose_name='Создан', auto_now_add=True)
     updated_at = models.DateTimeField(verbose_name='Обновлен', auto_now=True)
 

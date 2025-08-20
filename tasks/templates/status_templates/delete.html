@@ -5,6 +5,6 @@
 <form action="{% url 'tasks:status_delete' object.pk %}" method="post">
     {% csrf_token %}
     <p>Вы уверены, что хотите удалить {{ status.name }} ?</p>
-    <input type="submit" value="Да, удалить">
+    <button class="btn btn-danger" type="submit">Да, удалить</button>
 </form>
 {% endblock %}
