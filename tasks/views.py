@@ -1,6 +1,7 @@
-from django.shortcuts import render
+from django.shortcuts import render,redirect
 from django.views.generic import (
     ListView,
+    DetailView,
     UpdateView,
     DeleteView,
     CreateView
@@ -66,12 +67,32 @@ class TaskBaseView():
     success_url = reverse_lazy('tasks:task_index')
     success_message = None
 
+    def get_success_url(self):
+        response = super().get_success_url()
+        messages.success(self.request, self.success_message)
+        return response
+
 class TaskCreateView(LoginRequiredMixin, TaskBaseView, CreateView):
     success_message = 'Задача успешно создана'
+
+    def get_form(self):
+        form = super().get_form()
+        form.fields['assignee'].queryset = form.fields['assignee'].queryset.exclude(
+            id=self.request.user.id
+        )
+        return form
+        
+    def form_valid(self, form):
+        form.instance.author = self.request.user
+        return super().form_valid(form)
 
 class TaskUpdateView(LoginRequiredMixin, TaskBaseView, UpdateView):
     success_message = 'Задача успешно изменена'
     
+class TaskDetailView(DetailView):
+    model = Task
+    template_name = 'task_templates/show.html'
+    context_object_name = 'task'
 
 class TaskDeleteView(UserPassesTestMixin, DeleteView):
     model = Task
@@ -79,8 +100,8 @@ class TaskDeleteView(UserPassesTestMixin, DeleteView):
     success_url = reverse_lazy('tasks:task_index')
 
     def get_success_url(self):
-        messages.success(self.request, 'Статус успешно удален')
-        return super().get_success_url
+        messages.success(self.request, 'Задача успешно удалена')
+        return super().get_success_url()
 
     def test_func(self):
         task = self.get_object()
@@ -89,7 +110,7 @@ class TaskDeleteView(UserPassesTestMixin, DeleteView):
     def handle_no_permission(self):
         if self.request.user.is_authenticated:
             messages.error(self.request, 'Задачу может удалить только ее автор')
-            return success_url
+            return redirect(self.success_url)
         message.errors(self.request, 'Вы не авторизованы! Пожалуйста, выполните вход.')
-        return redirect(reverse('login'))
+        return super().handle_no_permission()
 

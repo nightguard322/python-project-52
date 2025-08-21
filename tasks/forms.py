@@ -1,6 +1,9 @@
 from django import forms
 from django.utils.translation import gettext_lazy as _
 from .models import Status, Task
+from django.contrib.auth import get_user_model
+
+User = get_user_model()
 
 class StatusModelForm(forms.ModelForm):
     class Meta:
@@ -21,3 +24,16 @@ class TaskModelForm(forms.ModelForm):
             'description',
             'status',
             'assignee']
+
+
+class TaskFilterForm(forms.Form):
+    status = forms.ModelChoiceField(
+        queryset= Status.objects.all(),
+        required=False,
+        label='Статус'
+    )
+    assignee = forms.ModelChoiceField(
+        queryset= User.objects.all(),
+        required=False,
+        label='Исполнитель'
+    )

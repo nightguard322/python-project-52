@@ -11,22 +11,13 @@
         </li>
         {% if user.is_authenticated %}
           <li class="nav-item">
-            <form action="{% url 'tasks:status_index' %}" method="post">
-              {% csrf_token %}
-              <button class="nav-link" type="submit">Статусы</button>
-            </form>
+            <a class="nav-link" href="{% url 'tasks:status_index' %}">Статусы</a>
           </li>
           <li class="nav-item">
-            <form action="{% url 'tasks:status_index' %}" method="post">
-              {% csrf_token %}
-              <button class="nav-link" type="submit">Метки</button>
-            </form>
+            <a class="nav-link" href="{% url 'tasks:task_index' %}">Метки</a>
           </li>
-          <li class="nav-item">
-            <form action="{% url 'tasks:task_index' %}" method="post">
-              {% csrf_token %}
-              <button class="nav-link" type="submit">Задачи</button>
-            </form>
+            <li class="nav-item">
+            <a class="nav-link" href="{% url 'tasks:task_index' %}">Задачи</a>
           </li>
           <li class="nav-item">
             <form action="{% url 'logout' %}" method="post">
