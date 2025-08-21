@@ -37,3 +37,4 @@ class TaskFilterForm(forms.Form):
         required=False,
         label='Исполнитель'
     )
+    self_task = forms.
