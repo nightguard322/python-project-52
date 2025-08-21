@@ -10,7 +10,7 @@ from django.urls import reverse_lazy
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from django.contrib import messages
 from .models import Status, Task
-from .forms import StatusModelForm, TaskModelForm
+from .forms import StatusModelForm, TaskModelForm, TaskFilterForm
 from django.db.models.deletion import ProtectedError
 
 # Create your views here.
@@ -59,6 +59,26 @@ class TaskListView(ListView):
     model = Task
     template_name = 'task_templates/index.html'
     context_object_name = 'tasks'
+
+    def get_queryset(self):
+        queryset = super().get_queryset()
+        form = TaskFilterForm(self.request.GET)
+        if form.is_valid():
+            if form.cleaned_data['status']:
+                queryset = queryset.filter(status=form.cleaned_data['status'])
+            
+            if form.cleaned_data['assignee']:
+                queryset = queryset.filter(assignee=form.cleaned_data['assignee'])
+
+            if form.cleaned_data['self_task']:
+                queryset = queryset.filter(author=self.request.user)
+        
+        return queryset
+
+    def get_context_data(self, *args, **kwargs):
+        context = super().get_context_data(*args, **kwargs)
+        context['filter_form'] = TaskFilterForm(self.request.GET)
+        return context
 
 class TaskBaseView():
     model = Task

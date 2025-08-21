@@ -37,4 +37,12 @@ class TaskFilterForm(forms.Form):
         required=False,
         label='Исполнитель'
     )
-    self_task = forms.
+    self_task = forms.BooleanField(
+        required=False,
+        label='Только свои задачи'
+    )
+
+    class Meta:
+        fields = [
+            'status', 'assignee', 'self_task'
+        ]
