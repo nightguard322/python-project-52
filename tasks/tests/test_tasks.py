@@ -134,7 +134,7 @@ def test_create_object(client, user, request, data, post_route, success_route, m
 @pytest.mark.parametrize(
     'model_name, data, post_route, success_route, message', [
         ('status', 'status_data', 'tasks:status_update', 'tasks:status_index', 'Статус успешно изменен'),
-        ('task', 'task_data', 'tasks:task_update', 'tasks:task_index', 'задача успешно изменена'),
+        ('task', 'task_data', 'tasks:task_update', 'tasks:task_index', 'Задача успешно изменена'),
     ]
 )
 def test_update_object(
@@ -205,6 +205,7 @@ def test_delete_object(
         client,
         user,
         model,
+        task,
         request,
         post_route,
         redirect_route,

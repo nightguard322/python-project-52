@@ -53,7 +53,7 @@ class StatusDeleteView(LoginRequiredMixin, DeleteView):
             super().delete(request, *args, **kwargs)
         except ProtectedError:
             messages.error(self.request, 'Невозможно удалить статус, потому что он используется')
-            return self.success_url
+            return redirect('tasks:status_index')
 
 class TaskListView(ListView):
     model = Task
@@ -133,4 +133,3 @@ class TaskDeleteView(UserPassesTestMixin, DeleteView):
             return redirect(self.success_url)
         message.errors(self.request, 'Вы не авторизованы! Пожалуйста, выполните вход.')
         return super().handle_no_permission()
-

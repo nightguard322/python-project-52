@@ -1,6 +1,8 @@
 from django.db import models
 from django.conf import settings
 from django.utils import timezone
+from django.contrib.contenttypes.fields import GenericRelation
+
 # Create your models here.
 class Status(models.Model):
     # NEW = 'new'
@@ -40,6 +42,7 @@ class Task(models.Model):
     status = models.ForeignKey('Status', verbose_name='Статус', on_delete=models.PROTECT)
     created_at = models.DateTimeField(verbose_name='Создан', auto_now_add=True)
     updated_at = models.DateTimeField(verbose_name='Обновлен', auto_now=True)
+    tags = GenericRelation('tags.TaggedItem')
 
     def __str__(self):
         return self.name
