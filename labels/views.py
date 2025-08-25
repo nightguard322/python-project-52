@@ -1,4 +1,4 @@
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from django.views.generic import(
     ListView,
     UpdateView,
@@ -6,24 +6,30 @@ from django.views.generic import(
     CreateView
 )
 from labels.models import Label
+from labels.forms import LabelBaseForm
 from django.contrib.auth.mixins import LoginRequiredMixin
+from django.contrib import messages
+from django.db.models.deletion import ProtectedError
+from django.urls import reverse_lazy
+
 
 # Create your views here.
-class LabelListView(DetailView):
+class LabelListView(ListView):
     model = Label
     template_name = 'index.html'
-    success_url = reverse('labels:index')
+    success_url = reverse_lazy('labels:index')
+    context_object_name = 'labels'
 
 class LabelBaseView():
     model = Label
-    form = LabelCreateForm
+    form_class = LabelBaseForm
     template_name = 'label_form.html'
-    success_url = reverse("labels:index")
+    success_url = reverse_lazy("labels:index")
     success_message = None
 
     def form_valid(self, form):
         response = super().form_valid(form)
-        message.success(self.request, self.success_message)
+        messages.success(self.request, self.success_message)
         return response
 
 class LabelCreateView(LoginRequiredMixin, LabelBaseView, CreateView):
@@ -35,7 +41,8 @@ class LabelUpdateView(LoginRequiredMixin, LabelBaseView, UpdateView):
 class LabelDeleteView(LoginRequiredMixin, DeleteView):
     model = Label
     template_name = 'delete.html'
-    success_url = reverse('labels:delete')
+    success_url = reverse_lazy('labels:index')
+    context_object_name = 'label'
 
     def delete(self, request, *args, **kwargs):
         try:

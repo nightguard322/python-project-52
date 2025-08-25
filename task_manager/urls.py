@@ -16,16 +16,22 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path, include, reverse_lazy
-from tasks import views as task_views
 from .views import CrispyLoginView, UserLogoutView
 from django.contrib.auth.views import LogoutView
+from django.urls import clear_url_caches
+from django.utils.module_loading import import_string
+
+clear_url_caches()
 
 urlpatterns = [
     # path('', task_views.index, name='index'),
     path('accounts/', include('accounts.urls')),
-    path('tasks/', include('tasks.urls')),
+    path('', include('tasks.urls')),
     path('labels/', include('labels.urls')),
     path('login/', CrispyLoginView.as_view(), name='login'),
     path('logout/', UserLogoutView.as_view(), name='logout'),
     path('admin/', admin.site.urls),
 ]
+
+print("urlpatterns type:", type(urlpatterns))
+print("urlpatterns value:", urlpatterns)

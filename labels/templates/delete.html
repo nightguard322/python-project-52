@@ -2,7 +2,7 @@
 
 {% block content %}
 <h2 class="my-4">Удаление метки</h2>
-<form action="url ('labels:delete' object.pk)" method="post">
+<form action="{% url 'labels:delete' pk=object.pk %}" method="post">
     {% csrf_token %}
     <p>Вы уверены, что хотите удалить {{ object.name }}?</p>
     <button type="submit" class="btn btn-danger">Да, удалить</button>
