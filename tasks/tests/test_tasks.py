@@ -205,7 +205,6 @@ def test_delete_object(
         client,
         user,
         model,
-        task,
         request,
         post_route,
         redirect_route,

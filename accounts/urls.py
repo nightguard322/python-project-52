@@ -1,7 +1,6 @@
 from django.contrib import admin
-from django.urls import path
+from django.urls import path, reverse_lazy
 from accounts import views as acc_views
-from django.urls import reverse_lazy
 
 app_name = 'accounts'
 
