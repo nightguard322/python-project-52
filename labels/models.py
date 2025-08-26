@@ -9,6 +9,9 @@ class Label(models.Model):
     created_at = models.DateTimeField(verbose_name='Создана', auto_now_add=True)
     updated_at = models.DateTimeField(verbose_name='Изменена', auto_now=True)
 
+    def __str__(self):
+        return self.name
+        
 class TaggedItem(models.Model):
     label = models.ForeignKey(Label, on_delete=models.PROTECT)
     content_type = models.ForeignKey(ContentType, on_delete=models.PROTECT)

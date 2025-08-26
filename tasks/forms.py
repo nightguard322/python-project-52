@@ -1,7 +1,7 @@
 from django import forms
 from django.utils.translation import gettext_lazy as _
 from .models import Status, Task
-from labels.models import Label
+from labels.models import Label, TaggedItem
 from django.contrib.auth import get_user_model
 
 User = get_user_model()
@@ -16,8 +16,14 @@ class StatusModelForm(forms.ModelForm):
                 'placeholder': 'Имя'
             })
         }
-
+# Форма для создания задачи 
 class TaskModelForm(forms.ModelForm):
+    label = forms.ModelMultipleChoiceField(
+        queryset=Label.objects.all(),
+        required=False,
+        widget=forms.SelectMultiple(attrs={'class': 'form-control'})
+        )
+    
     class Meta:
         model = Task
         fields = [
@@ -26,6 +32,7 @@ class TaskModelForm(forms.ModelForm):
             'status',
             'assignee']
 
+# Форма для фильтрации задач
 
 class TaskFilterForm(forms.Form):
     status = forms.ModelChoiceField(
@@ -43,7 +50,7 @@ class TaskFilterForm(forms.Form):
         label='Только свои задачи'
     )
     label = forms.ModelMultipleChoiceField(
-        queryset=Label.objects.all(),
+        queryset=TaggedItem.objects.all(),
         required=False,
         label='Теги'
     )
