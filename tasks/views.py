@@ -61,6 +61,7 @@ class TaskListView(ListView):
     template_name = 'task_templates/index.html'
     context_object_name = 'tasks'
 
+    #Выборка для результата, уже после формы
     def get_queryset(self):
         queryset = super().get_queryset()
         form = TaskFilterForm(self.request.GET)
@@ -74,15 +75,17 @@ class TaskListView(ListView):
             if form.cleaned_data['self_task']:
                 queryset = queryset.filter(author=self.request.user)
 
-            choosed_labels = form.cleaned_data.get('labels')
+            choosed_labels = form.cleaned_data.get('labels') #список выбранных id меток
             if choosed_labels:
                 queryset = queryset.filter(
-                    labels__in=choosed_labels #выбираем только те задачи, котоые содержат хотябы одну из выбранных меток
-                ).annotate(
-                    count_labels=Count('labels', filter=Q(labels__in=choosed_labels)) #группируем и подсчитываем количество задач по полю метка выбирая только те, которые такие же как выбранные
+                    labels__label_id__in=choosed_labels #выбираем только те задачи, котоые содержат хотябы одну из выбранных меток
+                )
+                
+                queryset = queryset.annotate(
+                    count_labels=Count('labels', filter=Q(labels__label_id__in=choosed_labels)) #группируем и подсчитываем количество задач по полю метка выбирая только те, которые такие же как выбранные
                 ).filter(
                     count_labels=len(choosed_labels) # фильтруем задачи по новому полю с подсчетом, чтобы количество меток (которые совпадают с выбранными) было равно количеству выбранных
-                ).distinct() # выбираем уникальные строки таблицы
+                ) # выбираем уникальные строки таблицы
 
         return queryset
 

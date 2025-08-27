@@ -62,11 +62,12 @@ class TaskFilterForm(forms.Form):
     self_task = forms.BooleanField(
         required=False,
         label='Только свои задачи'
-    )
-    labels = forms.ModelMultipleChoiceField(
-        queryset=TaggedItem.objects.all(),
+    )   
+    labels = forms.TypedMultipleChoiceField(
+        choices=[(label.id, label.name) for label in Label.objects.all()],
+        coerce=int,
         required=False,
-        label='Теги'
+        label="Метки"
     )
 
     class Meta:
