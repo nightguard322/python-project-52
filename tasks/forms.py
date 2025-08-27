@@ -18,7 +18,7 @@ class StatusModelForm(forms.ModelForm):
         }
 # Форма для создания задачи 
 class TaskModelForm(forms.ModelForm):
-    label = forms.ModelMultipleChoiceField(
+    labels = forms.ModelMultipleChoiceField(
         queryset=Label.objects.all(),
         required=False,
         widget=forms.SelectMultiple(attrs={'class': 'form-control'})
@@ -31,6 +31,20 @@ class TaskModelForm(forms.ModelForm):
             'description',
             'status',
             'assignee']
+        
+    def save(self, commit=True):
+        task = super().save(commit=False)
+
+        if commit:
+            task.save()
+            task.labels.clear()
+            for label in self.cleaned_data['labels']:
+                TaggedItem.objects.create(
+                    label=label,
+                    content_object=task
+                )
+        return task
+
 
 # Форма для фильтрации задач
 
@@ -49,7 +63,7 @@ class TaskFilterForm(forms.Form):
         required=False,
         label='Только свои задачи'
     )
-    label = forms.ModelMultipleChoiceField(
+    labels = forms.ModelMultipleChoiceField(
         queryset=TaggedItem.objects.all(),
         required=False,
         label='Теги'

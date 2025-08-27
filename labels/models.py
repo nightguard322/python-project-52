@@ -16,4 +16,7 @@ class TaggedItem(models.Model):
     label = models.ForeignKey(Label, on_delete=models.PROTECT)
     content_type = models.ForeignKey(ContentType, on_delete=models.PROTECT)
     object_id = models.PositiveIntegerField()
-    content_object = GenericForeignKey('content_type', 'object_id')
+    content_object = GenericForeignKey('content_type', 'object_id') 
+
+    def __str__(self):
+        return self.label.name

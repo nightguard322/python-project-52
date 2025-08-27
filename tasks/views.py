@@ -12,6 +12,7 @@ from django.contrib import messages
 from .models import Status, Task
 from .forms import StatusModelForm, TaskModelForm, TaskFilterForm
 from django.db.models.deletion import ProtectedError
+from django.db.models import Count, Q
 
 # Create your views here.
 
@@ -73,12 +74,12 @@ class TaskListView(ListView):
             if form.cleaned_data['self_task']:
                 queryset = queryset.filter(author=self.request.user)
 
-            choosed_labels = form.cleaned_data.get('label')
+            choosed_labels = form.cleaned_data.get('labels')
             if choosed_labels:
                 queryset = queryset.filter(
-                    label__in=choosed_labels #выбираем только те задачи, котоые содержат хотябы одну из выбранных меток
+                    labels__in=choosed_labels #выбираем только те задачи, котоые содержат хотябы одну из выбранных меток
                 ).annotate(
-                    count_labels=Count('label', filter=Q(label__in=choosed_labels)) #группируем и подсчитываем количество задач по полю метка выбирая только те, которые такие же как выбранные
+                    count_labels=Count('labels', filter=Q(labels__in=choosed_labels)) #группируем и подсчитываем количество задач по полю метка выбирая только те, которые такие же как выбранные
                 ).filter(
                     count_labels=len(choosed_labels) # фильтруем задачи по новому полю с подсчетом, чтобы количество меток (которые совпадают с выбранными) было равно количеству выбранных
                 ).distinct() # выбираем уникальные строки таблицы
@@ -115,16 +116,7 @@ class TaskCreateView(LoginRequiredMixin, TaskBaseView, CreateView):
     def form_valid(self, form):
         form.instance.author = self.request.user
         return super().form_valid(form)
-    
-    def save(self, commit=True):
-        task = super().save(commit=False)
 
-        if commit:
-            task.save()
-            task.labels.clear()
-            task.labels.add(*self.cleaned_data['tags'])
-        return task
-        
 
 class TaskUpdateView(LoginRequiredMixin, TaskBaseView, UpdateView):
     success_message = 'Задача успешно изменена'
@@ -151,5 +143,5 @@ class TaskDeleteView(UserPassesTestMixin, DeleteView):
         if self.request.user.is_authenticated:
             messages.error(self.request, 'Задачу может удалить только ее автор')
             return redirect(self.success_url)
-        message.errors(self.request, 'Вы не авторизованы! Пожалуйста, выполните вход.')
+        messages.errors(self.request, 'Вы не авторизованы! Пожалуйста, выполните вход.')
         return super().handle_no_permission()
