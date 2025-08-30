@@ -16,14 +16,14 @@ from django.urls import reverse_lazy
 # Create your views here.
 class LabelListView(ListView):
     model = Label
-    template_name = 'index.html'
+    template_name = 'labels_index.html'
     success_url = reverse_lazy('labels:index')
     context_object_name = 'labels'
 
 class LabelBaseView():
     model = Label
     form_class = LabelBaseForm
-    template_name = 'label_form.html'
+    template_name = 'labels_form.html'
     success_url = reverse_lazy("labels:index")
     success_message = None
 
@@ -40,7 +40,7 @@ class LabelUpdateView(LoginRequiredMixin, LabelBaseView, UpdateView):
 
 class LabelDeleteView(LoginRequiredMixin, DeleteView):
     model = Label
-    template_name = 'delete.html'
+    template_name = 'labels_delete.html'
     success_url = reverse_lazy('labels:index')
     context_object_name = 'label'
 

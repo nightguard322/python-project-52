@@ -16,6 +16,7 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path, include, reverse_lazy
+from django.views.generic import TemplateView
 from .views import CrispyLoginView, UserLogoutView
 from django.contrib.auth.views import LogoutView
 from django.urls import clear_url_caches
@@ -26,6 +27,7 @@ clear_url_caches()
 urlpatterns = [
     # path('', task_views.index, name='index'),
     path('accounts/', include('accounts.urls')),
+    path('', TemplateView.as_view(template_name='index.html'), name='home'),
     path('', include('tasks.urls')),
     path('labels/', include('labels.urls')),
     path('login/', CrispyLoginView.as_view(), name='login'),
