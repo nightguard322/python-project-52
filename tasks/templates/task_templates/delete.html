@@ -1,0 +1,10 @@
+{% extends 'base/layout.html' %}
+
+{% block content %}
+<h1 class="my-4">Удаление Задачи</h1>
+<form action="{% url 'tasks:task_delete' object.pk %}" method="post">
+    {% csrf_token %}
+    <p>Вы уверены, что хотите удалить {{ task.name }} ?</p>
+    <button class="btn btn-danger" type="submit">Да, удалить</button>
+</form>
+{% endblock %}

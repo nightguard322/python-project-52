@@ -1,0 +1,43 @@
+{% extends 'base/layout.html' %}
+{% load crispy_forms_tags %}
+
+{% block content %}
+    <h1 class="my-4">Задачи</h1>
+    <a href="{% url 'tasks:task_create' %}" class="btn btn-primary mb-3">Создать задачу</a>
+    <div class="card mb-3">
+        <div class="card-body bg-light">
+            <form action="." method="get">
+                {% csrf_token %}
+                {{ filter_form|crispy }}
+                <input class ='btn btn-primary' type="submit" value="Показать">
+            </form>
+        </div> 
+    </div>
+
+    <table class="table table-striped">
+        <tr>
+            <th>ID</th>
+            <th>Имя</th>
+            <th>Статус</th>
+            <th>Автор</th>
+            <th>Исполнитель</th>
+            <th>Дата создания</th>
+            <th></th>
+        </tr>
+        {% for task in tasks %}
+            <tr>
+                <td>{{ task.pk }}</td>
+                <td><a href="{% url 'tasks:task_show' task.id %}">{{ task.name }}</a></td>
+                <td>{{ task.status.name }}</td>
+                <td>{{ task.author.username }}</td>
+                <td>{{ task.assignee.username }}</td>
+                <td>{{ task.created_at }}</td>
+                <td>
+                    <a href="{% url 'tasks:task_update' task.id %}">Изменить</a>
+                    <br>
+                    <a href="{% url 'tasks:task_delete' task.id %}">Удалить</a>
+                </td>
+            </tr>
+        {% endfor %}
+    </table>
+{% endblock %}

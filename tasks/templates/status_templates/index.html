@@ -1,0 +1,28 @@
+{% extends 'base/layout.html' %}
+{% load message_tags %}
+
+
+{% block content %}
+    <h1 class="my-4">Статусы</h1>
+    <a href="{% url 'tasks:status_create' %}" class="btn btn-primary mb-3">Создать статус</a>
+    <table class="table table-striped">
+        <tr>
+            <th>ID</th>
+            <th>Имя</th>
+            <th>Дата создания</th>
+            <th></th>
+        </tr>
+        {% for status in statuses %}
+            <tr>
+                <td>{{ status.pk }}</td>
+                <td>{{ status.name }}</td>
+                <td>{{ status.created_at }}</td>
+                <td>
+                    <a href="{% url 'tasks:status_update' status.pk %}">Изменить</a>
+                    <br>
+                    <a href="{% url 'tasks:status_delete' status.pk %}">Удалить</a>
+                </td>
+            </tr>
+        {% endfor %}
+    </table>
+{% endblock %}

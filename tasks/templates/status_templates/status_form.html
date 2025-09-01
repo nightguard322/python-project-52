@@ -1,0 +1,15 @@
+{% extends 'base/layout.html' %}
+
+
+{% block content %}
+<h1 class="my-4">{% if object.pk %} Изменить {% else %} Создать {% endif %} статус</h1>
+<form method="post">
+    {% csrf_token %}
+    <div class="mb-3">    
+        <label class='form-label' for="{{ form.name.id_for_label }}">{{ form.name.label }}</label>
+        {{ form.name }}
+        {{ form.name.errors }}
+    </div>
+    <input type="submit" class ='btn btn-primary' value="{% if object.pk %} Изменить {% else %} Создать {% endif %}">
+</form>
+{% endblock %}
