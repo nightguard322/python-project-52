@@ -14,7 +14,6 @@ import sys
 from pathlib import Path
 from dotenv import load_dotenv
 import rollbar
-import setup_path
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -48,9 +47,9 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'crispy_forms',
     'crispy_bootstrap5',
-    'labels',
-    'tasks',
-    'accounts',
+    'task_manager.labels',
+    'task_manager.tasks',
+    'task_manager.accounts',
 ]
 
 MIDDLEWARE = [

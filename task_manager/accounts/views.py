@@ -1,5 +1,5 @@
 from django.shortcuts import render, redirect
-from . forms import CustomUserCreationForm, UserUpdateForm
+from .forms import CustomUserCreationForm, UserUpdateForm
 from django.views.generic import CreateView
 from django.views.generic import UpdateView
 from django.views.generic import DeleteView

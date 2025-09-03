@@ -1,5 +1,5 @@
 from django.urls import path
-from accounts import views as acc_views
+from task_manager.accounts import views as acc_views
 
 app_name = 'accounts'
 

@@ -1,5 +1,3 @@
-import setup_path  # ← обязательно первой строкой!
-
 import pytest
 import django
 import os

@@ -5,8 +5,8 @@ from django.views.generic import(
     DeleteView,
     CreateView
 )
-from labels.models import Label
-from labels.forms import LabelBaseForm
+from task_manager.labels.models import Label
+from task_manager.labels.forms import LabelBaseForm
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib import messages
 from django.db.models.deletion import ProtectedError

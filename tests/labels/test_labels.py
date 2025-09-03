@@ -1,6 +1,6 @@
 import pytest
 from django.urls import reverse
-from labels.models import Label
+from task_manager.labels.models import Label
 from pytest_django.asserts import assertRedirects, assertContains, assertNotContains
 from django.contrib.auth import get_user_model
 

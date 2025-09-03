@@ -9,8 +9,8 @@ from django.views.generic import (
 from django.urls import reverse_lazy
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from django.contrib import messages
-from tasks.models import Status, Task
-from tasks.forms import StatusModelForm, TaskModelForm, TaskFilterForm
+from task_manager.tasks.models import Status, Task
+from task_manager.tasks.forms import StatusModelForm, TaskModelForm, TaskFilterForm
 from django.db.models.deletion import ProtectedError
 from django.db.models import Count, Q
 
