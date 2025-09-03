@@ -15,17 +15,16 @@ def tag():
 @pytest.fixture
 def user():
     User = get_user_model()
-    return User(
+    return User.objects.create_user(
         username='test',
         first_name='test',
         last_name='test',
-        password1='12345',
-        password2='12345'
+        password='Fd12745'
     )
 
 @pytest.mark.django_db
-def test_unlogged_user_access(self, client):
-    response = client.get('labels:index')
+def test_unlogged_user_access(client):
+    response = client.get(reverse('labels:index'))
     assertRedirects(
         response,
         expected_url=f"{reverse('login')}?next={reverse('labels:index')}",
@@ -37,21 +36,23 @@ def test_unlogged_user_access(self, client):
 @pytest.mark.django_db
 @pytest.mark.parametrize(
     'route, expected_content', [
-        (reverse('labels:index'), 'Создать метку')
-        (reverse('labels:create'), 'Создать'),
-        (reverse('labels:update'), 'Изменение метки'),
-        (reverse('labels:delete'), 'Удаление метки'),
+        ('index', 'Создать метку'),
+        ('create', 'Создать'),
+        ('update', 'Изменение метки'),
+        ('delete', 'Удаление метки'),
     ]
 )
 def test_logged_user_can_see_forms(client, user, tag, route, expected_content):
+    client.force_login(user)
     if 'update' in route or 'delete' in route:
-        url = reverse(route, kwargs={'pk': tag.id})
+        url = reverse(f'labels:{route}', kwargs={'pk': tag.id})
     else:
-        url = reverse(route)
+        url = reverse(f'labels:{route}')
 
     response = client.get(url)
     assert response.status_code == 200
-    assert expected_content in response.content.decode()
+    content = response.content.decode('utf-8')
+    assert expected_content in content
 
 @pytest.mark.django_db
 @pytest.mark.parametrize(
@@ -60,11 +61,11 @@ def test_logged_user_can_see_forms(client, user, tag, route, expected_content):
         ('update', 'labels:update')
     ]
 )
-def test_tag_create_or_update(client, user, tag, route, action):
+def test_tag_create_or_update(client, user, tag, post_route, action):
     client.force_login(user)
     tag_name = 'test_tag'
     response = client.post(
-        reverse(route, kwargs={} if action == 'create' else {'pk': tag.id}),
+        reverse(post_route, kwargs={} if action == 'create' else {'pk': tag.id}),
         {'name': tag_name},
         follow=True
     )
@@ -81,7 +82,7 @@ def test_tag_create_or_update(client, user, tag, route, action):
 def test_tag_delete(client, user, tag):
     client.force_login(user)
     response = client.post(
-        reverse('labels:delete'), kwargs={'pk': tag.id},
+        reverse('labels:delete', kwargs={'pk': tag.id}),
         follow=True
     )
     assertRedirects(

@@ -14,7 +14,7 @@ from django.urls import reverse_lazy
 
 
 # Create your views here.
-class LabelListView(ListView):
+class LabelListView(LoginRequiredMixin, ListView):
     model = Label
     template_name = 'labels_index.html'
     success_url = reverse_lazy('labels:index')
