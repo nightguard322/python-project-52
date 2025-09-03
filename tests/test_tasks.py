@@ -1,7 +1,7 @@
 import pytest
 from django.urls import reverse
 from django.contrib.auth import get_user_model
-from ..models import Status, Task
+from tasks.models import Status, Task
 from django.contrib.messages import get_messages
 
 @pytest.fixture

@@ -27,3 +27,7 @@ dependencies = [
 DJANGO_SETTINGS_MODULE = "task_manager.settings"
 python_files = ["tests.py", "test_*.py", "*_tests.py"]
 addopts = ["--tb=short", "--strict-markers"]
+
+[pytest]
+pythonpath = ['.']
+testpaths = ['tasks/tests', 'accounts/tests', 'labels/tests']
