@@ -43,11 +43,11 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'task_manager',
-    'accounts',
     'crispy_forms',
     'crispy_bootstrap5',
     'tasks',
-    'labels'
+    'labels',
+    'accounts',
 ]
 
 MIDDLEWARE = [

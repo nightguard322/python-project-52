@@ -27,11 +27,11 @@ clear_url_caches()
 urlpatterns = [
     path('', TemplateView.as_view(template_name='index.html'), name='home'),
     path('', include('tasks.urls')),
-    path('accounts/', include('accounts.urls')),
     path('labels/', include('labels.urls')),
     path('login/', CrispyLoginView.as_view(), name='login'),
     path('logout/', UserLogoutView.as_view(), name='logout'),
     path('admin/', admin.site.urls),
+    path('accounts/', include('accounts.urls')),
 ]
 
 print("urlpatterns type:", type(urlpatterns))
