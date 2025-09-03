@@ -7,11 +7,11 @@ class UsersConfig(AppConfig):
     name = 'accounts'
 
 
-    rollbar.init(
-        access_token=os.getenv('ROLLBACK_ACCESS_TOKEN'),
-        environment=os.getenv('DJANGO_ENVIRONMENT'),
-        code_version=os.getenv('GIT_COMMIT')
-    )
+rollbar.init(
+    access_token=os.getenv('ROLLBACK_ACCESS_TOKEN'),
+    environment=os.getenv('DJANGO_ENVIRONMENT'),
+    code_version=os.getenv('GIT_COMMIT')
+)
     
 rollbar.report_message('Rollbar is configured correctly', 'info')
 rollbar.report_message('Rollbar is configured correctly', 'info')
