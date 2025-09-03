@@ -25,10 +25,9 @@ from django.utils.module_loading import import_string
 clear_url_caches()
 
 urlpatterns = [
-    # path('', task_views.index, name='index'),
-    path('accounts/', include('accounts.urls')),
     path('', TemplateView.as_view(template_name='index.html'), name='home'),
     path('', include('tasks.urls')),
+    path('accounts/', include('accounts.urls')),
     path('labels/', include('labels.urls')),
     path('login/', CrispyLoginView.as_view(), name='login'),
     path('logout/', UserLogoutView.as_view(), name='logout'),
