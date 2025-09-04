@@ -11,6 +11,11 @@ class CustomUserCreationForm(UserCreationForm):
         self.helper = FormHelper()
         self.helper.form_method = 'post'
         self.helper.add_input(Submit('submit', 'Зарегистрировать', css_class='btn btn-primary'))
+        self.fields['first_name'].widget.attrs['placeholder'] = 'Имя'
+        self.fields['last_name'].widget.attrs['placeholder'] = 'Фамилия'
+        self.fields['username'].widget.attrs['placeholder'] = 'Имя пользователя'
+        self.fields['password1'].widget.attrs['placeholder'] = 'Пароль'
+        self.fields['password2'].widget.attrs['placeholder'] = 'Подтверждение пароля'
 
     class Meta:
         model = get_user_model()
