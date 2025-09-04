@@ -30,7 +30,13 @@ class TaskModelForm(forms.ModelForm):
             'name',
             'description',
             'status',
-            'assignee']
+            'executor']
+    
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.fields['executor'].widget.attrs.update({
+            'id': 'id_executor'
+        })
         
     def save(self, commit=True):
         task = super().save(commit=False)
@@ -72,7 +78,7 @@ class TaskFilterForm(forms.Form):
 
     class Meta:
         fields = [
-            'status', 'assignee', 'self_task'
+            'status', 'executor', 'self_task'
         ]
 
     def __init__(self, *args, **kwargs):

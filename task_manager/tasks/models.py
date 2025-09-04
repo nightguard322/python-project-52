@@ -33,10 +33,10 @@ class Task(models.Model):
         related_name='author',
         on_delete=models.PROTECT
     )
-    assignee = models.ForeignKey(
+    executor = models.ForeignKey(
         settings.AUTH_USER_MODEL,
         verbose_name='Исполнитель',
-        related_name='assignee',
+        related_name='executor',
         on_delete=models.PROTECT
     )
     status = models.ForeignKey('Status', verbose_name='Статус', on_delete=models.PROTECT)

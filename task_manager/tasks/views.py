@@ -69,8 +69,8 @@ class TaskListView(ListView):
             if form.cleaned_data['status']:
                 queryset = queryset.filter(status=form.cleaned_data['status'])
             
-            if form.cleaned_data['assignee']:
-                queryset = queryset.filter(assignee=form.cleaned_data['assignee'])
+            if form.cleaned_data['executor']:
+                queryset = queryset.filter(assignee=form.cleaned_data['executor'])
 
             if form.cleaned_data['self_task']:
                 queryset = queryset.filter(author=self.request.user)
@@ -111,7 +111,7 @@ class TaskCreateView(LoginRequiredMixin, TaskBaseView, CreateView):
 
     def get_form(self):
         form = super().get_form()
-        form.fields['assignee'].queryset = form.fields['assignee'].queryset.exclude(
+        form.fields['executor'].queryset = form.fields['executor'].queryset.exclude(
             id=self.request.user.id
         )
         return form
