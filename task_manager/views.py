@@ -14,7 +14,7 @@ class CrispyLoginView(LoginView):
         return response
 
 class UserLogoutView(LogoutView):
-    next_page = reverse_lazy('accounts:index')
+    next_page = reverse_lazy('home')
 
     def dispatch(self, request, *args, **kwargs):
         messages.info(self.request, 'Вы разлогинены')
