@@ -1,7 +1,7 @@
 from django import forms
 from django.utils.translation import gettext_lazy as _
-from tasks.models import Status, Task
-from labels.models import Label, TaggedItem
+from task_manager.tasks.models import Status, Task
+from task_manager.labels.models import Label, TaggedItem
 from django.contrib.auth import get_user_model
 
 User = get_user_model()
