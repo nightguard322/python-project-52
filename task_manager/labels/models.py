@@ -5,7 +5,7 @@ from django.contrib.contenttypes.fields import GenericForeignKey
 
 # Create your models here.
 class Label(models.Model):
-    name = models.CharField(max_length=200, verbose_name='Метка')
+    name = models.CharField(max_length=200, verbose_name='Имя')
     created_at = models.DateTimeField(verbose_name='Создана', auto_now_add=True)
     updated_at = models.DateTimeField(verbose_name='Изменена', auto_now=True)
 
