@@ -46,9 +46,12 @@ class LabelDeleteView(LoginRequiredMixin, DeleteView):
 
     def delete(self, request, *args, **kwargs):
         try:
-            messages.success(self.request, 'Метка успешно удалена')
             return super().delete(self.request, *args, **kwargs)
         except ProtectedError:
             messages.error(self.request, 'Невозможно удалить метку, потому что она используется')
             return redirect(self.success_url)
+        
+    def get_success_url(self):
+        messages.success(self.request, 'Метка успешно удалена')
+        return super().get_success_url()
 

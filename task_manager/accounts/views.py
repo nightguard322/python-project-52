@@ -63,3 +63,7 @@ class UserDeleteView(LoginRequiredMixin, UserPassesTestMixin, DeleteView):
             return redirect(reverse('accounts:index'))
         messages.error(self.request, 'Вы не авторизованы! Пожалуйста, выполните вход.')
         return redirect(reverse('login'))
+
+    def get_success_url(self):
+        messages.success(self.request, 'Пользователь успешно удален')
+        return super().get_success_url()
