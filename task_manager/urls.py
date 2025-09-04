@@ -31,5 +31,5 @@ urlpatterns = [
     path('login/', CrispyLoginView.as_view(), name='login'),
     path('logout/', UserLogoutView.as_view(), name='logout'),
     path('admin/', admin.site.urls),
-    path('accounts/', include('task_manager.accounts.urls')),
+    path('users/', include('task_manager.accounts.urls')),
 ]
