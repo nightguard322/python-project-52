@@ -6,7 +6,7 @@ from django.contrib import messages
 class CrispyLoginView(LoginView):
     form_class = CrispyLoginForm
     template_name = 'registration/login.html'
-    success_url = reverse_lazy('accounts:index')
+    success_url = reverse_lazy('index')
 
     def form_valid(self, form):
         response = super().form_valid(form)
