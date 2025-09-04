@@ -35,7 +35,7 @@ class Task(models.Model):
     )
     assignee = models.ForeignKey(
         settings.AUTH_USER_MODEL,
-        verbose_name='Испольнитель',
+        verbose_name='Исполнитель',
         related_name='assignee',
         on_delete=models.PROTECT
     )
