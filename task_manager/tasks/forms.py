@@ -64,7 +64,7 @@ class TaskFilterForm(forms.Form):
         label='Только свои задачи'
     )   
     labels = forms.TypedMultipleChoiceField(
-        choices=[(label.id, label.name) for label in Label.objects.all()],
+        choices=[],
         coerce=int,
         required=False,
         label="Метки"
@@ -74,3 +74,7 @@ class TaskFilterForm(forms.Form):
         fields = [
             'status', 'assignee', 'self_task'
         ]
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.fields['labels'].choices = [(label.id, label.name) for label in Label.objects.all()]

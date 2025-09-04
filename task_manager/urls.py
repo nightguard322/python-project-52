@@ -33,6 +33,3 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('accounts/', include('task_manager.accounts.urls')),
 ]
-
-print("urlpatterns type:", type(urlpatterns))
-print("urlpatterns value:", urlpatterns)
