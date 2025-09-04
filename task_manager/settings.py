@@ -86,13 +86,15 @@ WSGI_APPLICATION = 'task_manager.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/5.2/ref/settings/#databases
 import dj_database_url
-default_db =  {'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
-}
+default_db =  {
+            'ENGINE': 'django.db.backends.sqlite3',
+            'NAME': BASE_DIR / 'db.sqlite3',
+        }
 
-if 'DATABASE_URL' in os.environ:
-    DATABASES = {
+DATABASES = {
         'default': dj_database_url.parse(os.environ['DATABASE_URL'])
+        if 'DATABASE_URL' in os.environ
+        else default_db
     }
 
 # Password validation
