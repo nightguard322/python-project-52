@@ -50,7 +50,12 @@ class TaskModelForm(forms.ModelForm):
                     content_object=task
                 )
         return task
-
+    
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.fields['executor'].label_from_instance = (
+            lambda user: f"{user.first_name} {user.last_name}"
+        )
 
 # Форма для фильтрации задач
 
