@@ -108,13 +108,6 @@ class TaskBaseView():
 
 class TaskCreateView(LoginRequiredMixin, TaskBaseView, CreateView):
     success_message = 'Задача успешно создана'
-
-    def get_form(self):
-        form = super().get_form()
-        form.fields['executor'].queryset = form.fields['executor'].queryset.exclude(
-            id=self.request.user.id
-        )
-        return form
         
     def form_valid(self, form):
         form.instance.author = self.request.user

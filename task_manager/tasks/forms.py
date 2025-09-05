@@ -31,9 +31,7 @@ class TaskModelForm(forms.ModelForm):
             'description',
             'status',
             'executor']
-    
 
-        
     def save(self, commit=True):
         task = super().save(commit=False)
 
