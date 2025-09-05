@@ -70,7 +70,7 @@ class TaskListView(ListView):
                 queryset = queryset.filter(status=form.cleaned_data['status'])
             
             if form.cleaned_data['executor']:
-                queryset = queryset.filter(assignee=form.cleaned_data['executor'])
+                queryset = queryset.filter(executor=form.cleaned_data['executor'])
 
             if form.cleaned_data['self_task']:
                 queryset = queryset.filter(author=self.request.user)
