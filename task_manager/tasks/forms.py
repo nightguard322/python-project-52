@@ -31,6 +31,12 @@ class TaskModelForm(forms.ModelForm):
             'description',
             'status',
             'executor']
+        widgets = {
+            'executor': forms.Select(attrs={
+                'aria-label': "Исполнитель",
+                'class': 'form-select',
+            }),
+        }
 
     def save(self, commit=True):
         task = super().save(commit=False)
