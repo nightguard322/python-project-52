@@ -79,7 +79,7 @@ class TaskFilterForm(forms.Form):
         choices=[],
         coerce=int,
         required=False,
-        label="Метки"
+        label="Метка"
     )
 
     class Meta:
