@@ -3,6 +3,7 @@ from django.utils.translation import gettext_lazy as _
 from task_manager.tasks.models import Status, Task
 from task_manager.labels.models import Label, TaggedItem
 from django.contrib.auth import get_user_model
+from django.contrib.contenttypes.models import ContentType
 
 User = get_user_model()
 
@@ -57,6 +58,12 @@ class TaskModelForm(forms.ModelForm):
         self.fields['executor'].label_from_instance = (
             lambda user: f"{user.first_name} {user.last_name}"
         )
+        if self.instance and self.instance.pk:
+            selected_labels_ids = TaggedItem.objects.filter(
+                content_type=ContentType.objects.get_for_model(Task),
+                object_id=self.instance.pk
+            ).values_list('label_id', flat=True)
+            self.fields['labels'].initial = Label.objects.filter(id__in=selected_labels_ids)
 
 # Форма для фильтрации задач
 
