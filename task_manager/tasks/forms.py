@@ -90,3 +90,6 @@ class TaskFilterForm(forms.Form):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.fields['labels'].choices = [(label.id, label.name) for label in Label.objects.all()]
+        self.fields['executor'].label_from_instance = (
+            lambda user: f"{user.first_name} {user.last_name}"
+        )
