@@ -60,7 +60,7 @@ class TaskFilterForm(forms.Form):
         required=False,
         label='Статус'
     )
-    assignee = forms.ModelChoiceField(
+    executor = forms.ModelChoiceField(
         queryset= User.objects.all(),
         required=False,
         label='Исполнитель'
