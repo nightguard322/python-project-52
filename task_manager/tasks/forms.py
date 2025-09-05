@@ -32,11 +32,7 @@ class TaskModelForm(forms.ModelForm):
             'status',
             'executor']
     
-    def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
-        self.fields['executor'].widget.attrs.update({
-            'id': 'id_executor'
-        })
+
         
     def save(self, commit=True):
         task = super().save(commit=False)
