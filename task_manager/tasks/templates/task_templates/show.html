@@ -1,4 +1,5 @@
 {% extends 'base/layout.html' %}
+{% load user_extras %}
 
 {% block content %}
     <h1 class="my-4">Просмотр задачи</h1>
@@ -16,7 +17,7 @@
                 </div>
                 <div class="row p-1">
                     <div class="col">Исполнитель</div>
-                    <div class="col">{{ task.executor.first_name }} {{ task.executor.last_name }}</div>
+                    <div class="col">{{ task.executor|full_name:"Не указано" }}</div>
                 </div>
                 <div class="row p-1">
                     <div class="col">Статус</div>
