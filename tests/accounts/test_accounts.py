@@ -10,7 +10,7 @@ def user():
     return User.objects.create_user(
         username='Vasya',
         first_name='Vasya',
-        last_name = 'Pupkin',
+        last_name ='Pupkin',
         password='Qq12345'
     )
 

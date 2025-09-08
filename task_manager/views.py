@@ -3,6 +3,7 @@ from .forms import CrispyLoginForm
 from django.urls import reverse_lazy
 from django.contrib import messages
 
+
 class CrispyLoginView(LoginView):
     form_class = CrispyLoginForm
     template_name = 'registration/login.html'
@@ -12,6 +13,7 @@ class CrispyLoginView(LoginView):
         response = super().form_valid(form)
         messages.success(self.request, 'Вы залогинены')
         return response
+
 
 class UserLogoutView(LogoutView):
     next_page = reverse_lazy('home')

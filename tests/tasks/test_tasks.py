@@ -9,7 +9,7 @@ def user():
     return User.objects.create_user(
         username='Vasya',
         first_name='Vasya',
-        last_name = 'Pupkin',
+        last_name ='Pupkin',
         password='Qq12345'
     )
 
@@ -19,7 +19,7 @@ def assignee():
     return User.objects.create_user(
         username='Bob',
         first_name='Bob',
-        last_name = 'Marley',
+        last_name ='Marley',
         password='Qy123456'
     )
 
@@ -76,7 +76,13 @@ def test_logged_user_access_page(user, client, route, text):
         ('tasks:task_update', 'task'),
     ]
 )
-def test_logged_user_can_see_edit_form(client, user, request, route, fixture_name):
+def test_logged_user_can_see_edit_form(
+        client,
+        user,
+        request,
+        route,
+        fixture_name
+    ):
     client.force_login(user)
     entity = request.getfixturevalue(fixture_name)
     response = client.get(
@@ -109,7 +115,15 @@ def test_user_can_see_task(client, user, task):
         ),
     ]
 )
-def test_create_object(client, user, request, data, post_route, success_route, message):
+def test_create_object(
+        client,
+        user,
+        request,
+        data,
+        post_route,
+        success_route,
+        message
+        ):
     client.force_login(user)
     post_data = request.getfixturevalue(data)
     response = client.post(
@@ -132,8 +146,20 @@ def test_create_object(client, user, request, data, post_route, success_route, m
 @pytest.mark.django_db
 @pytest.mark.parametrize(
     'model_name, data, post_route, success_route, message', [
-        ('status', 'status_data', 'tasks:status_update', 'tasks:status_index', 'Статус успешно изменен'),
-        ('task', 'task_data', 'tasks:task_update', 'tasks:task_index', 'Задача успешно изменена'),
+        (
+            'status',
+            'status_data',
+            'tasks:status_update',
+            'tasks:status_index',
+            'Статус успешно изменен'
+        ),
+        (
+            'task',
+            'task_data',
+            'tasks:task_update',
+            'tasks:task_index',
+            'Задача успешно изменена'
+        ),
     ]
 )
 def test_update_object(
@@ -173,7 +199,13 @@ def test_update_object(
         ('task', 'tasks:task_delete'),
     ]
 )
-def test_logged_user_can_see_delete_form(client, user, request, model, route):
+def test_logged_user_can_see_delete_form(
+        client,
+        user,
+        request,
+        model,
+        route
+        ):
     client.force_login(user)
     entity = request.getfixturevalue(model)
     response = client.get(

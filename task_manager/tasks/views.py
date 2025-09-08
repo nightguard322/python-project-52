@@ -10,12 +10,16 @@ from django.urls import reverse_lazy
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from django.contrib import messages
 from task_manager.tasks.models import Status, Task
-from task_manager.tasks.forms import StatusModelForm, TaskModelForm, TaskFilterForm
+from task_manager.tasks.forms import (
+    StatusModelForm,
+    TaskModelForm,
+    TaskFilterForm
+)
 from django.db.models.deletion import ProtectedError
 from django.db.models import Count, Q
 
-# Create your views here.
 
+# Create your views here.
 class StatusListView(ListView):
     model = Status
     template_name = 'status_templates/index.html'
@@ -55,7 +59,7 @@ class StatusDeleteView(LoginRequiredMixin, DeleteView):
     def post(self, request, *args, **kwargs):
         self.object = self.get_object()
         try:
-            self.object.delete()  # ← Явно вызываем delete() и ловим исключение
+            self.object.delete()
         except ProtectedError:
             messages.error(
                 request, 
@@ -63,7 +67,7 @@ class StatusDeleteView(LoginRequiredMixin, DeleteView):
             )
             return redirect('tasks:status_index')
         messages.success(request, 'Статус успешно удален')
-        return redirect(self.success_url)  #
+        return redirect(self.success_url)
 
 
 class TaskListView(ListView):
@@ -71,7 +75,7 @@ class TaskListView(ListView):
     template_name = 'task_templates/index.html'
     context_object_name = 'tasks'
 
-    #Выборка для результата, уже после формы
+
     def get_queryset(self):
         queryset = super().get_queryset()
         form = TaskFilterForm(self.request.GET)
