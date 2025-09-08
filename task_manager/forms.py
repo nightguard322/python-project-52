@@ -1,5 +1,5 @@
 from crispy_forms.helper import FormHelper
-from crispy_forms.layout import Submit, Layout, Field
+from crispy_forms.layout import Submit
 from django.contrib.auth.forms import AuthenticationForm
 
 class CrispyLoginForm(AuthenticationForm):

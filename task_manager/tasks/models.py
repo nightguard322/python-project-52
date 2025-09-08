@@ -1,6 +1,5 @@
 from django.db import models
 from django.conf import settings
-from django.utils import timezone
 from django.contrib.contenttypes.fields import GenericRelation
 
 # Create your models here.

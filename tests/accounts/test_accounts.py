@@ -144,4 +144,4 @@ def test_delete_user(client, user):
     redirect_url, status_code = response.redirect_chain[0]
     assert status_code == 302
     assert redirect_url== reverse('accounts:index')
-    assert not 'Vasya Pupkin' in response.content.decode()
+    assert 'Vasya Pupkin' not in response.content.decode()

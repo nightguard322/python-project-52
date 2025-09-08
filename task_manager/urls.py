@@ -15,12 +15,10 @@ Including another URLconf
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
 from django.contrib import admin
-from django.urls import path, include, reverse_lazy
+from django.urls import path, include
 from django.views.generic import TemplateView
 from .views import CrispyLoginView, UserLogoutView
-from django.contrib.auth.views import LogoutView
 from django.urls import clear_url_caches
-from django.utils.module_loading import import_string
 
 clear_url_caches()
 
