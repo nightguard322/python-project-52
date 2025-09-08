@@ -5,17 +5,24 @@ from django import forms
 from crispy_forms.helper import FormHelper
 from crispy_forms.layout import Submit
 
+
 class CustomUserCreationForm(UserCreationForm):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.helper = FormHelper()
         self.helper.form_method = 'post'
-        self.helper.add_input(Submit('submit', 'Зарегистрировать', css_class='btn btn-primary'))
-        self.fields['first_name'].widget.attrs['placeholder'] = 'Имя'
-        self.fields['last_name'].widget.attrs['placeholder'] = 'Фамилия'
-        self.fields['username'].widget.attrs['placeholder'] = 'Имя пользователя'
-        self.fields['password1'].widget.attrs['placeholder'] = 'Пароль'
-        self.fields['password2'].widget.attrs['placeholder'] = 'Подтверждение пароля'
+        self.helper.add_input(
+            Submit('submit', 'Зарегистрировать', css_class='btn btn-primary')
+        )
+        placeholders = {
+            'first_name': 'Имя',
+            'last_name': 'Фамилия',
+            'username': 'Имя пользователя',
+            'password1': 'Пароль',
+            'password2': 'Подтверждение пароля'
+        }
+        for field_name, placeholder in placeholders.items():
+            self.fields[field_name].widget.attrs['placeholder'] = placeholder
 
     class Meta:
         model = get_user_model()
@@ -23,25 +30,38 @@ class CustomUserCreationForm(UserCreationForm):
 
         error_messages = {
             'username': {
-                'required': _('Обязательное поле. Не более 150 символов. Только буквы, цифры и символы @/./+/-/_.'),
+                'required': _(
+                    'Обязательное поле. Не более 150 символов.'
+                    'Только буквы, цифры и символы @/./+/-/_.'),
             },
             'password1': {
-                'required': _('Ваш пароль должен содержать как минимум 3 символа.')
+                'required': _(
+                    'Ваш пароль должен содержать'
+                    'как минимум 3 символа.')
             },
             'password2': {
-                'required': _('Для подтверждения введите, пожалуйста, пароль ещё раз.')
+                'required': _(
+                    'Для подтверждения введите,'
+                    'пожалуйста, пароль ещё раз.')
             }
         }
+
 
 class UserUpdateForm(forms.ModelForm):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.helper = FormHelper()
         self.helper.form_method = 'post'
-        self.helper.add_input(Submit('submit', 'Изменить', css_class='btn btn-primary'))
+        self.helper.add_input(Submit(
+            'submit', 'Изменить', css_class='btn btn-primary')
+            )
 
-    password1 = forms.CharField(label='Пароль', widget=forms.PasswordInput)
-    password2 = forms.CharField(label='Подтверждение пароля', widget=forms.PasswordInput)
+    password1 = forms.CharField(
+        label='Пароль', widget=forms.PasswordInput
+    )
+    password2 = forms.CharField(
+        label='Подтверждение пароля', widget=forms.PasswordInput
+    )
 
     class Meta:
         model = get_user_model()
@@ -54,12 +74,17 @@ class UserUpdateForm(forms.ModelForm):
             raise forms.ValidationError('Пароли не совпадают')
         return password2
 
+
 class UserDeleteForm(forms.ModelForm):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.helper = FormHelper()
         self.helper.form_method = 'post'
-        self.helper.add_input(Submit('submit', 'Да, удалить', css_class='btn btn-danger'))
+        self.helper.add_input(
+            Submit(
+                'submit', 'Да, удалить', css_class='btn btn-danger'
+                )
+            )
     
     confirm = forms.BooleanField(
         required=True
