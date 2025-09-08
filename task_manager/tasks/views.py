@@ -50,14 +50,14 @@ class StatusDeleteView(LoginRequiredMixin, DeleteView):
         return self.success_url
 
     def post(self, request, *args, **kwargs):
-            self.object = self.get_object()
-            try:
-                self.object.delete()  # ← Явно вызываем delete() и ловим исключение
-            except ProtectedError:
-                messages.error(request, 'Невозможно удалить статус, потому что он используется')
-                return redirect('tasks:status_index')
-            messages.success(request, 'Статус успешно удален')
-            return redirect(self.success_url)  #
+        self.object = self.get_object()
+        try:
+            self.object.delete()  # ← Явно вызываем delete() и ловим исключение
+        except ProtectedError:
+            messages.error(request, 'Невозможно удалить статус, потому что он используется')
+            return redirect('tasks:status_index')
+        messages.success(request, 'Статус успешно удален')
+        return redirect(self.success_url)  #
 
 class TaskListView(ListView):
     model = Task

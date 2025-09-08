@@ -44,14 +44,13 @@ class LabelDeleteView(LoginRequiredMixin, DeleteView):
     success_url = reverse_lazy('labels:index')
     context_object_name = 'label'
 
-    def delete(self, request, *args, **kwargs):
+    def post(self, request, *args, **kwargs):
+        self.object = self.get_object()
         try:
-            return super().delete(self.request, *args, **kwargs)
+            self.object.delete()  # ← Явно вызываем delete() и ловим исключение
         except ProtectedError:
-            messages.error(self.request, 'Невозможно удалить метку, потому что она используется')
-            return redirect(self.success_url)
-        
-    def get_success_url(self):
-        messages.success(self.request, 'Метка успешно удалена')
-        return super().get_success_url()
+            messages.error(request, 'Невозможно удалить метку, потому что она используется')
+            return redirect('labels:index')
+        messages.success(request, 'Метка успешно удалена')
+        return redirect(self.success_url)  #
 
