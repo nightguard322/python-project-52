@@ -148,7 +148,7 @@ def test_update_user(client, user):
     )
     redirect_url, status_code = response.redirect_chain[0]
     assert status_code == 302
-    assert redirect_url== reverse('accounts:index')
+    assert redirect_url == reverse('accounts:index')
     assert 'new test name' in response.content.decode()
 
 
