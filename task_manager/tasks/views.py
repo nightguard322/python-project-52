@@ -75,7 +75,6 @@ class TaskListView(ListView):
     template_name = 'task_templates/index.html'
     context_object_name = 'tasks'
 
-
     def get_queryset(self):
         queryset = super().get_queryset()
         form = TaskFilterForm(self.request.GET)

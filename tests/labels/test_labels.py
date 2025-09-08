@@ -1,7 +1,11 @@
 import pytest
 from django.urls import reverse
 from task_manager.labels.models import Label
-from pytest_django.asserts import assertRedirects, assertContains, assertNotContains
+from pytest_django.asserts import (
+    assertRedirects,
+    assertContains,
+    assertNotContains
+) 
 from django.contrib.auth import get_user_model
 
 
@@ -10,6 +14,7 @@ def tag():
     return Label.objects.create(
         name='test_tag'
     )
+
 
 @pytest.fixture
 def user():
@@ -20,6 +25,7 @@ def user():
         last_name='test',
         password='Fd12745'
     )
+
 
 @pytest.mark.django_db
 def test_unlogged_user_access(client):
@@ -53,6 +59,7 @@ def test_logged_user_can_see_forms(client, user, tag, route, expected_content):
     content = response.content.decode('utf-8')
     assert expected_content in content
 
+
 @pytest.mark.django_db
 @pytest.mark.parametrize(
     'action, post_route', [
@@ -64,7 +71,11 @@ def test_tag_create_or_update(client, user, tag, post_route, action):
     client.force_login(user)
     tag_name = 'test_tag'
     response = client.post(
-        reverse(post_route, kwargs={} if action == 'create' else {'pk': tag.id}),
+        reverse(
+            post_route, kwargs={}
+            if action == 'create'
+            else {'pk': tag.id}
+        ),
         {'name': tag_name},
         follow=True
     )

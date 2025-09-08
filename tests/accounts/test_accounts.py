@@ -10,7 +10,7 @@ def user():
     return User.objects.create_user(
         username='Vasya',
         first_name='Vasya',
-        last_name ='Pupkin',
+        last_name='Pupkin',
         password='Qq12345'
     )
 
@@ -24,8 +24,8 @@ def _check_permissions_helper(
         message
     ):
     MESSAGES = {
-        'not_logged_in':'Вы не авторизованы! Пожалуйста, выполните вход.',
-        'no_permission':'У вас нет прав для изменения другого пользователя.'
+        'not_logged_in': 'Вы не авторизованы! Пожалуйста, выполните вход.',
+        'no_permission': 'У вас нет прав для изменения другого пользователя.'
     }
 
     if user_type == 'non_owner':
@@ -33,14 +33,14 @@ def _check_permissions_helper(
         stranger = User.objects.create_user(
             username='stranger',
             first_name='Test',
-            last_name = 'Test'
+            last_name='Test'
         )
         stranger.set_password('123Qq123')
         stranger.save()
         client.force_login(stranger)
 
     response = client.post(
-        reverse(route, kwargs={'pk':user.id}),
+        reverse(route, kwargs={'pk': user.id}),
         {'name': 'testname'},
         follow=True
     )
@@ -48,13 +48,12 @@ def _check_permissions_helper(
     response_messages = list(get_messages(response.wsgi_request))
     assert MESSAGES[message] in str(response_messages[0])
 
+
 @pytest.mark.django_db
 @pytest.mark.parametrize(('user_type', 'redirect_page', 'message'), [
     ('anonimus', '/login/', 'not_logged_in'),
     ('non_owner', '/accounts/', 'no_permission')
 ])
-
-
 def test_edit_permissions(
     client,
     user,
@@ -71,13 +70,12 @@ def test_edit_permissions(
         message
     )
 
+
 @pytest.mark.django_db
 @pytest.mark.parametrize(('user_type', 'redirect_page', 'message'), [
     ('anonimus', '/login/', 'not_logged_in'),
     ('non_owner', '/accounts/', 'no_permission')
 ])
-
-
 def test_delete_permissions(client, user, user_type, redirect_page, message):
     _check_permissions_helper(
         client,
@@ -119,7 +117,7 @@ def test_register_user(client, user):
         'first_name': 'test',
         'last_name': 'test'
     }
-    response = client.post(reverse('accounts:signup'),wrong_user)
+    response = client.post(reverse('accounts:signup'), wrong_user)
     assert response.status_code == 200
     right_user = {
         'username': 'test',
@@ -128,7 +126,7 @@ def test_register_user(client, user):
         'password1': 'Tyu1254Q',
         'password2': 'Tyu1254Q'
     }
-    response = client.post(reverse('accounts:signup'),right_user)
+    response = client.post(reverse('accounts:signup'), right_user)
     assert response.status_code == 302
     assert response.url == reverse('login')
     accounts_list = client.get(reverse('accounts:index'))
@@ -165,5 +163,5 @@ def test_delete_user(client, user):
     )
     redirect_url, status_code = response.redirect_chain[0]
     assert status_code == 302
-    assert redirect_url== reverse('accounts:index')
+    assert redirect_url == reverse('accounts:index')
     assert 'Vasya Pupkin' not in response.content.decode()

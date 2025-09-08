@@ -3,15 +3,17 @@ from django.urls import reverse
 from django.contrib.auth import get_user_model
 from task_manager.tasks.models import Status, Task
 
+
 @pytest.fixture
 def user():
     User = get_user_model()
     return User.objects.create_user(
         username='Vasya',
         first_name='Vasya',
-        last_name ='Pupkin',
+        last_name='Pupkin',
         password='Qq12345'
     )
+
 
 @pytest.fixture
 def assignee():
@@ -19,9 +21,10 @@ def assignee():
     return User.objects.create_user(
         username='Bob',
         first_name='Bob',
-        last_name ='Marley',
+        last_name='Marley',
         password='Qy123456'
     )
+
 
 @pytest.fixture
 def status():
@@ -29,9 +32,11 @@ def status():
         name='test_status_name'
     )
 
+
 @pytest.fixture
 def status_data():
-    return {'name':'test_status_name'}
+    return {'name': 'test_status_name'}
+
 
 @pytest.fixture
 def task(user, assignee, status):
@@ -43,6 +48,7 @@ def task(user, assignee, status):
         status=status
     )
 
+
 @pytest.fixture
 def task_data(user, assignee, status):
     return {
@@ -52,6 +58,7 @@ def task_data(user, assignee, status):
             'assignee': assignee.id,
             'status': status.id
         }
+
 
 @pytest.mark.django_db  
 @pytest.mark.parametrize(
@@ -91,12 +98,14 @@ def test_logged_user_can_see_edit_form(
     assert response.status_code == 200
     assert entity.name in response.content.decode()
 
+
 @pytest.mark.django_db
 def test_user_can_see_task(client, user, task):
     client.force_login(user)
     response = client.get(reverse('tasks:task_show', kwargs={'pk': task.id}))
     assert response.status_code == 200
     assert task.name in response.content.decode()
+
 
 @pytest.mark.django_db
 @pytest.mark.parametrize(
@@ -212,7 +221,10 @@ def test_logged_user_can_see_delete_form(
         reverse(route, kwargs={'pk': entity.pk})
     )
     assert response.status_code == 200
-    assert f'Вы уверены, что хотите удалить {entity.name} ?' in response.content.decode()
+    assert (
+        f'Вы уверены, что хотите удалить {entity.name} ?'
+        in response.content.decode()
+    )
 
 
 @pytest.mark.django_db
