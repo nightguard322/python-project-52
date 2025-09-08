@@ -6,6 +6,7 @@ from django.contrib.contenttypes.models import ContentType
 
 User = get_user_model()
 
+
 class StatusModelForm(forms.ModelForm):
     class Meta:
         model = Status
@@ -16,12 +17,16 @@ class StatusModelForm(forms.ModelForm):
                 'placeholder': 'Имя'
             })
         }
+
+
 # Форма для создания задачи 
 class TaskModelForm(forms.ModelForm):
     labels = forms.ModelMultipleChoiceField(
         queryset=Label.objects.all(),
         required=False,
-        widget=forms.SelectMultiple(attrs={'class': 'form-control'}),
+        widget=forms.SelectMultiple(
+            attrs={'class': 'form-control'}
+        ),
         label='Метки'
         )
     
@@ -62,18 +67,20 @@ class TaskModelForm(forms.ModelForm):
                 content_type=ContentType.objects.get_for_model(Task),
                 object_id=self.instance.pk
             ).values_list('label_id', flat=True)
-            self.fields['labels'].initial = Label.objects.filter(id__in=selected_labels_ids)
+            self.fields['labels'].initial = Label.objects.filter(
+                id__in=selected_labels_ids
+            )
 
 # Форма для фильтрации задач
 
 class TaskFilterForm(forms.Form):
     status = forms.ModelChoiceField(
-        queryset= Status.objects.all(),
+        queryset=Status.objects.all(),
         required=False,
         label='Статус'
     )
     executor = forms.ModelChoiceField(
-        queryset= User.objects.all(),
+        queryset=User.objects.all(),
         required=False,
         label='Исполнитель'
     )
@@ -95,7 +102,11 @@ class TaskFilterForm(forms.Form):
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        self.fields['labels'].choices = [(label.id, label.name) for label in Label.objects.all()]
+        self.fields['labels'].choices = [
+            (label.id, label.name)
+            for label
+            in Label.objects.all()
+        ]
         self.fields['executor'].label_from_instance = (
             lambda user: f"{user.first_name} {user.last_name}"
         )

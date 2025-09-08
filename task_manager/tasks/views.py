@@ -21,6 +21,7 @@ class StatusListView(ListView):
     template_name = 'status_templates/index.html'
     context_object_name = 'statuses'
 
+
 class StatusBaseView():
     model = Status
     form_class = StatusModelForm
@@ -33,8 +34,10 @@ class StatusBaseView():
         messages.success(self.request, self.success_message)
         return response
 
+
 class StatusCreateView(LoginRequiredMixin, StatusBaseView, CreateView):
     success_message = 'Статус успешно создан'
+
 
 class StatusUpdateView(LoginRequiredMixin, StatusBaseView, UpdateView):
     success_message = 'Статус успешно изменен'
@@ -54,10 +57,14 @@ class StatusDeleteView(LoginRequiredMixin, DeleteView):
         try:
             self.object.delete()  # ← Явно вызываем delete() и ловим исключение
         except ProtectedError:
-            messages.error(request, 'Невозможно удалить статус, потому что он используется')
+            messages.error(
+                request, 
+                'Невозможно удалить статус, потому что он используется'
+            )
             return redirect('tasks:status_index')
         messages.success(request, 'Статус успешно удален')
         return redirect(self.success_url)  #
+
 
 class TaskListView(ListView):
     model = Task
@@ -70,25 +77,33 @@ class TaskListView(ListView):
         form = TaskFilterForm(self.request.GET)
         if form.is_valid():
             if form.cleaned_data['status']:
-                queryset = queryset.filter(status=form.cleaned_data['status'])
+                queryset = queryset.filter(
+                    status=form.cleaned_data['status']
+                )
             
             if form.cleaned_data['executor']:
-                queryset = queryset.filter(executor=form.cleaned_data['executor'])
+                queryset = queryset.filter(
+                    executor=form.cleaned_data['executor']
+                )
 
             if form.cleaned_data['self_task']:
-                queryset = queryset.filter(author=self.request.user)
+                queryset = queryset.filter(
+                    author=self.request.user
+                )
 
-            choosed_labels = form.cleaned_data.get('labels') #список выбранных id меток
+            choosed_labels = form.cleaned_data.get('labels')
             if choosed_labels:
                 queryset = queryset.filter(
-                    labels__label_id__in=choosed_labels #выбираем только те задачи, котоые содержат хотябы одну из выбранных меток
+                    labels__label_id__in=choosed_labels
                 )
                 
                 queryset = queryset.annotate(
-                    count_labels=Count('labels', filter=Q(labels__label_id__in=choosed_labels)) #группируем и подсчитываем количество задач по полю метка выбирая только те, которые такие же как выбранные
+                    count_labels=Count('labels', filter=Q(
+                        labels__label_id__in=choosed_labels
+                    ))
                 ).filter(
-                    count_labels=len(choosed_labels) # фильтруем задачи по новому полю с подсчетом, чтобы количество меток (которые совпадают с выбранными) было равно количеству выбранных
-                ) # выбираем уникальные строки таблицы
+                    count_labels=len(choosed_labels) 
+                )
 
         return queryset
 
@@ -96,6 +111,7 @@ class TaskListView(ListView):
         context = super().get_context_data(*args, **kwargs)
         context['filter_form'] = TaskFilterForm(self.request.GET)
         return context
+
 
 class TaskBaseView():
     model = Task
@@ -109,6 +125,7 @@ class TaskBaseView():
         messages.success(self.request, self.success_message)
         return response
 
+
 class TaskCreateView(LoginRequiredMixin, TaskBaseView, CreateView):
     success_message = 'Задача успешно создана'
         
@@ -119,11 +136,13 @@ class TaskCreateView(LoginRequiredMixin, TaskBaseView, CreateView):
 
 class TaskUpdateView(LoginRequiredMixin, TaskBaseView, UpdateView):
     success_message = 'Задача успешно изменена'
-    
+
+ 
 class TaskDetailView(DetailView):
     model = Task
     template_name = 'task_templates/show.html'
     context_object_name = 'task'
+
 
 class TaskDeleteView(UserPassesTestMixin, DeleteView):
     model = Task
@@ -131,7 +150,10 @@ class TaskDeleteView(UserPassesTestMixin, DeleteView):
     success_url = reverse_lazy('tasks:task_index')
 
     def get_success_url(self):
-        messages.success(self.request, 'Задача успешно удалена')
+        messages.success(
+            self.request,
+            'Задача успешно удалена'
+        )
         return super().get_success_url()
 
     def test_func(self):
@@ -140,7 +162,13 @@ class TaskDeleteView(UserPassesTestMixin, DeleteView):
 
     def handle_no_permission(self):
         if self.request.user.is_authenticated:
-            messages.error(self.request, 'Задачу может удалить только ее автор')
+            messages.error(
+                self.request, 
+                'Задачу может удалить только ее автор'
+            )
             return redirect(self.success_url)
-        messages.errors(self.request, 'Вы не авторизованы! Пожалуйста, выполните вход.')
+        messages.errors(
+            self.request,
+            'Вы не авторизованы! Пожалуйста, выполните вход.'
+        )
         return super().handle_no_permission()

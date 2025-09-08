@@ -12,6 +12,7 @@ class Label(models.Model):
     def __str__(self):
         return self.name
         
+
 class TaggedItem(models.Model):
     label = models.ForeignKey(Label, on_delete=models.PROTECT)
     content_type = models.ForeignKey(ContentType, on_delete=models.PROTECT)

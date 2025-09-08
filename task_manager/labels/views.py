@@ -1,5 +1,5 @@
 from django.shortcuts import redirect
-from django.views.generic import(
+from django.views.generic import (
     ListView,
     UpdateView,
     DeleteView,
@@ -20,6 +20,7 @@ class LabelListView(LoginRequiredMixin, ListView):
     success_url = reverse_lazy('labels:index')
     context_object_name = 'labels'
 
+
 class LabelBaseView():
     model = Label
     form_class = LabelBaseForm
@@ -32,11 +33,14 @@ class LabelBaseView():
         messages.success(self.request, self.success_message)
         return response
 
+
 class LabelCreateView(LoginRequiredMixin, LabelBaseView, CreateView):
     success_message = 'Метка успешно создана'
 
+
 class LabelUpdateView(LoginRequiredMixin, LabelBaseView, UpdateView):
     success_message = 'Метка успешно изменена'
+
 
 class LabelDeleteView(LoginRequiredMixin, DeleteView):
     model = Label
@@ -47,9 +51,12 @@ class LabelDeleteView(LoginRequiredMixin, DeleteView):
     def post(self, request, *args, **kwargs):
         self.object = self.get_object()
         try:
-            self.object.delete()  # ← Явно вызываем delete() и ловим исключение
+            self.object.delete()
         except ProtectedError:
-            messages.error(request, 'Невозможно удалить метку, потому что она используется')
+            messages.error(
+                request, 
+                'Невозможно удалить метку, потому что она используется'
+            )
             return redirect('labels:index')
         messages.success(request, 'Метка успешно удалена')
         return redirect(self.success_url)  #
