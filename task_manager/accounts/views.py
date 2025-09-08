@@ -5,6 +5,7 @@ from django.views.generic import UpdateView
 from django.views.generic import DeleteView
 from django.views.generic import ListView
 from django.contrib.auth import get_user_model
+from django.db.models.deletion import ProtectedError
 from django.urls import reverse_lazy, reverse
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from django.contrib import messages
@@ -64,6 +65,12 @@ class UserDeleteView(LoginRequiredMixin, UserPassesTestMixin, DeleteView):
         messages.error(self.request, 'Вы не авторизованы! Пожалуйста, выполните вход.')
         return redirect(reverse('login'))
 
-    def get_success_url(self):
-        messages.success(self.request, 'Пользователь успешно удален')
-        return super().get_success_url()
+    def post(self, request, *args, **kwargs):
+        self.object = self.get_object()
+        try:
+            self.object.delete()
+        except ProtectedError:
+            messages.error(self.request, 'Невозможно удалить пользователя, потому что он используется') 
+            return redirect("accounts:index")
+        messages.success(request, 'Пользователь успешно удален')
+        return redirect(self.success_url) 
