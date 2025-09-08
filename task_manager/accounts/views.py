@@ -10,7 +10,6 @@ from django.urls import reverse_lazy, reverse
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from django.contrib import messages
 
-# Create your views here.
 
 class UserCreateView(CreateView):
     form_class = CustomUserCreationForm
@@ -42,14 +41,23 @@ class UserUpdateView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
     
     def handle_no_permission(self):     
         if self.request.user.is_authenticated:
-            messages.error(self.request, 'У вас нет прав для изменения другого пользователя.')
+            messages.error(
+                self.request,
+                'У вас нет прав для изменения другого пользователя.'
+            )
             return redirect(reverse('accounts:index'))
-        messages.error(self.request, 'Вы не авторизованы! Пожалуйста, выполните вход.')
+        messages.error(
+            self.request,
+            'Вы не авторизованы! Пожалуйста, выполните вход.'
+        )
         return redirect(reverse('login'))
 
     def form_valid(self, form):
         response = super().form_valid(form)
-        messages.success(self.request, 'Пользователь успешно изменен')
+        messages.success(
+            self.request,
+            'Пользователь успешно изменен'
+        )
         return response
 
 

@@ -18,8 +18,9 @@ class StatusModelForm(forms.ModelForm):
             })
         }
 
+# Форма для создания задачи
 
-# Форма для создания задачи 
+
 class TaskModelForm(forms.ModelForm):
     labels = forms.ModelMultipleChoiceField(
         queryset=Label.objects.all(),
@@ -72,6 +73,7 @@ class TaskModelForm(forms.ModelForm):
             )
 
 # Форма для фильтрации задач
+
 
 class TaskFilterForm(forms.Form):
     status = forms.ModelChoiceField(

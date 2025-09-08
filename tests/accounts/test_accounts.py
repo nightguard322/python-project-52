@@ -15,10 +15,17 @@ def user():
     )
 
 
-def _check_permissions_helper(client, route, user, user_type, redirect_page, message):
+def _check_permissions_helper(
+        client,
+        route,
+        user,
+        user_type,
+        redirect_page,
+        message
+    ):
     MESSAGES = {
-        'not_logged_in' :'Вы не авторизованы! Пожалуйста, выполните вход.',
-        'no_permission' :'У вас нет прав для изменения другого пользователя.'
+        'not_logged_in':'Вы не авторизованы! Пожалуйста, выполните вход.',
+        'no_permission':'У вас нет прав для изменения другого пользователя.'
     }
 
     if user_type == 'non_owner':
@@ -48,8 +55,21 @@ def _check_permissions_helper(client, route, user, user_type, redirect_page, mes
 ])
 
 
-def test_edit_permissions(client, user, user_type, redirect_page, message):
-    _check_permissions_helper(client, 'accounts:update', user, user_type, redirect_page, message)
+def test_edit_permissions(
+    client,
+    user,
+    user_type,
+    redirect_page,
+    message
+    ):
+    _check_permissions_helper(
+        client,
+        'accounts:update',
+        user,
+        user_type,
+        redirect_page,
+        message
+    )
 
 @pytest.mark.django_db
 @pytest.mark.parametrize(('user_type', 'redirect_page', 'message'), [
@@ -59,7 +79,14 @@ def test_edit_permissions(client, user, user_type, redirect_page, message):
 
 
 def test_delete_permissions(client, user, user_type, redirect_page, message):
-    _check_permissions_helper(client, 'accounts:delete', user, user_type, redirect_page, message)
+    _check_permissions_helper(
+        client,
+        'accounts:delete',
+        user,
+        user_type,
+        redirect_page,
+        message
+    )
 
 
 @pytest.mark.django_db
@@ -121,15 +148,10 @@ def test_update_user(client, user):
         },
         follow=True
     )
-    if not response.redirect_chain:
-        form = response.context['form']
-        print(form.errors)
-        assert False, 'Ожидался редирект, но тест провалился, видимо ошибка валидации'
-    else:
-        redirect_url, status_code = response.redirect_chain[0]
-        assert status_code == 302
-        assert redirect_url== reverse('accounts:index')
-        assert 'new test name' in response.content.decode()
+    redirect_url, status_code = response.redirect_chain[0]
+    assert status_code == 302
+    assert redirect_url== reverse('accounts:index')
+    assert 'new test name' in response.content.decode()
 
 
 @pytest.mark.django_db
